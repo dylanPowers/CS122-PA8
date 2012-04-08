@@ -19,6 +19,8 @@ namespace Game
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        Block block;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -33,6 +35,7 @@ namespace Game
         /// </summary>
         protected override void Initialize()
         {
+            block = new Block();
             // TODO: Add your initialization logic here
 
             base.Initialize();
@@ -47,7 +50,11 @@ namespace Game
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            //Begin Loading Code
+            Vector2 vector = new Vector2((GraphicsDevice.Viewport.Width) / 4, (GraphicsDevice.Viewport.Height) / 4);
+            Texture2D texture = Content.Load<Texture2D>("smiley");
+            block.Initialize(texture, vector);
+            //End Loading Code
         }
 
         /// <summary>
@@ -83,7 +90,13 @@ namespace Game
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            spriteBatch.Begin();
+
+            // Begin Drawing Code
+            block.Draw(spriteBatch);
+            // End Drawing Code
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }

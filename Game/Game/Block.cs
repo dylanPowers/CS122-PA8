@@ -21,14 +21,14 @@ namespace Game
             get { return texture.Width; }
         }
 
-        public void Initialize(Texture2D initTexture, Vector2 initPosition)
+        public virtual void Initialize(Texture2D initTexture, Vector2 initPosition)
         {
             texture = initTexture;
             position = initPosition;
             active = true;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
             if (active)
             {

@@ -1,1 +1,3 @@
 Content\smiley.xnb
+Content\brick.xnb
+Content\mario.xnb

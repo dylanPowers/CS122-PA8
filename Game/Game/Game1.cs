@@ -18,8 +18,12 @@ namespace Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        KeyboardState currentKeyboardState;
+        KeyboardState previousKeyboardState;
 
-        Block block;
+        Block block1;
+        Player player1;
+        Player player2;
 
         public Game1()
         {
@@ -35,8 +39,11 @@ namespace Game
         /// </summary>
         protected override void Initialize()
         {
-            block = new Block();
-            // TODO: Add your initialization logic here
+            //Begin Initialization Code
+            block1 = new Block();
+            player1 = new Player();
+            player2 = new Player();
+            //End Initialization Code
 
             base.Initialize();
         }
@@ -51,9 +58,14 @@ namespace Game
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             //Begin Loading Code
-            Vector2 vector = new Vector2((GraphicsDevice.Viewport.Width) / 4, (GraphicsDevice.Viewport.Height) / 4);
-            Texture2D texture = Content.Load<Texture2D>("smiley");
-            block.Initialize(texture, vector);
+            Texture2D textureBlock = Content.Load<Texture2D>("brick");
+            Vector2 vectorBlock = new Vector2(50, 50);
+            block1.Initialize(textureBlock, vectorBlock);
+
+            Texture2D texturePlayer = Content.Load<Texture2D>("mario");
+            Vector2 playerVector = new Vector2(100, 100);
+            player1.Initialize(texturePlayer, playerVector);
+            player2.Initialize(texturePlayer, playerVector);
             //End Loading Code
         }
 
@@ -77,7 +89,43 @@ namespace Game
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            // TODO: Add your update logic here
+            previousKeyboardState = currentKeyboardState;
+            currentKeyboardState = Keyboard.GetState();
+
+            //Begin Update Code
+            if (currentKeyboardState.IsKeyDown(Keys.Left))
+            {
+                player1.position.X -= 10;
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.Right))
+            {
+                player1.position.X += 10;
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.Up))
+            {
+                player1.position.Y -= 10;
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.Down))
+            {
+                player1.position.Y += 10;
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.A))
+            {
+                player2.position.X -= 10;
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.D))
+            {
+                player2.position.X += 10;
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.W))
+            {
+                player2.position.Y -= 10;
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.S))
+            {
+                player2.position.Y += 10;
+            }
+            //End Update Code
 
             base.Update(gameTime);
         }
@@ -88,12 +136,14 @@ namespace Game
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.White);
 
             spriteBatch.Begin();
 
             // Begin Drawing Code
-            block.Draw(spriteBatch);
+            block1.Draw(spriteBatch);
+            player1.Draw(spriteBatch);
+            player2.Draw(spriteBatch);
             // End Drawing Code
 
             spriteBatch.End();

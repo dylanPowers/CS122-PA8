@@ -1,4 +1,6 @@
-Game\Game\bin\
-Game\Game\obj\
-Game\GameContent\bin\
-Game\GameContent\obj\
+# It must be remembered that GIT is UNIX based so you must use UNIX like directories.
+# This should set git to ignore these directories
+Game/Game/obj/
+Game/Game/bin/
+Game/GameContent/bin/
+Game/GameContent/obj/

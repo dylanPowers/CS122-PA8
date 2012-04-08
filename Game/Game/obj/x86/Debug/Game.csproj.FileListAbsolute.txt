@@ -1,0 +1,6 @@
+c:\users\evan\documents\visual studio 2010\Projects\Game\Game\Game\bin\x86\Debug\Game.exe
+c:\users\evan\documents\visual studio 2010\Projects\Game\Game\Game\bin\x86\Debug\Game.pdb
+c:\users\evan\documents\visual studio 2010\Projects\Game\Game\Game\obj\x86\Debug\Game.csprojResolveAssemblyReference.cache
+c:\users\evan\documents\visual studio 2010\Projects\Game\Game\Game\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+c:\users\evan\documents\visual studio 2010\Projects\Game\Game\Game\obj\x86\Debug\Game.exe
+c:\users\evan\documents\visual studio 2010\Projects\Game\Game\Game\obj\x86\Debug\Game.pdb

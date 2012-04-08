@@ -20,13 +20,13 @@
       <Time>2012-04-08T01:50:26.8078291-07:00</Time>
     </Item>
     <Item>
-      <Source>mario.jpg</Source>
+      <Source>mario.png</Source>
       <Name>mario</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\Evan\Documents\Visual Studio 2010\Projects\Game\Game\Game\bin\x86\Debug\Content\mario.xnb</Output>
-      <Time>2012-04-08T01:56:37.7050432-07:00</Time>
+      <Time>2012-04-08T10:57:08.2941815-07:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

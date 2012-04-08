@@ -56,7 +56,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="mario.jpg">
+    <Compile Include="mario.png">
       <Name>mario</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>

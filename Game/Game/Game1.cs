@@ -21,9 +21,13 @@ namespace Game
         KeyboardState currentKeyboardState;
         KeyboardState previousKeyboardState;
 
+        //Begin Declaration Code
         Block block1;
         Player player1;
         Player player2;
+
+        int playerMoveSpeed;
+        //End Declaration Code
 
         public Game1()
         {
@@ -43,6 +47,7 @@ namespace Game
             block1 = new Block();
             player1 = new Player();
             player2 = new Player();
+            playerMoveSpeed = 10;
             //End Initialization Code
 
             base.Initialize();
@@ -95,35 +100,59 @@ namespace Game
             //Begin Update Code
             if (currentKeyboardState.IsKeyDown(Keys.Left))
             {
-                player1.position.X -= 10;
+                if (player1.position.X - playerMoveSpeed > 0)
+                    player1.position.X -= playerMoveSpeed;
+                else
+                    player1.position.X = 0;
             }
             if (currentKeyboardState.IsKeyDown(Keys.Right))
             {
-                player1.position.X += 10;
+                if (player1.position.X + playerMoveSpeed + player1.width < GraphicsDevice.Viewport.Width)
+                    player1.position.X += playerMoveSpeed;
+                else
+                    player1.position.X = GraphicsDevice.Viewport.Width - player1.width;
             }
             if (currentKeyboardState.IsKeyDown(Keys.Up))
             {
-                player1.position.Y -= 10;
+                if (player1.position.Y - playerMoveSpeed > 0)
+                    player1.position.Y -= playerMoveSpeed;
+                else
+                    player1.position.Y = 0;
             }
             if (currentKeyboardState.IsKeyDown(Keys.Down))
             {
-                player1.position.Y += 10;
+                if (player1.position.Y + playerMoveSpeed + player2.height < GraphicsDevice.Viewport.Height)
+                    player1.position.Y += playerMoveSpeed;
+                else
+                    player1.position.Y = GraphicsDevice.Viewport.Height - player1.height;
             }
             if (currentKeyboardState.IsKeyDown(Keys.A))
             {
-                player2.position.X -= 10;
+                if (player2.position.X - playerMoveSpeed > 0)
+                    player2.position.X -= playerMoveSpeed;
+                else
+                    player2.position.X = 0;
             }
             if (currentKeyboardState.IsKeyDown(Keys.D))
             {
-                player2.position.X += 10;
+                if (player2.position.X + playerMoveSpeed + player2.width < GraphicsDevice.Viewport.Width)
+                    player2.position.X += playerMoveSpeed;
+                else
+                    player2.position.X = GraphicsDevice.Viewport.Width - player2.width;
             }
             if (currentKeyboardState.IsKeyDown(Keys.W))
             {
-                player2.position.Y -= 10;
+                if (player2.position.Y - playerMoveSpeed > 0)
+                    player2.position.Y -= playerMoveSpeed;
+                else
+                    player2.position.Y = 0;
             }
             if (currentKeyboardState.IsKeyDown(Keys.S))
             {
-                player2.position.Y += 10;
+                if (player2.position.Y + playerMoveSpeed + player2.height < GraphicsDevice.Viewport.Height)
+                    player2.position.Y += playerMoveSpeed;
+                else
+                    player2.position.Y = GraphicsDevice.Viewport.Height - player2.height;
             }
             //End Update Code
 

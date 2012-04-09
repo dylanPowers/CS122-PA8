@@ -27,6 +27,11 @@ namespace Game
         Player player2;
 
         int playerMoveSpeed;
+
+        const int UP = 1;
+        const int DOWN = 2;
+        const int LEFT = 3;
+        const int RIGHT = 4;
         //End Declaration Code
 
         public Game1()
@@ -97,21 +102,13 @@ namespace Game
             previousKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
 
+            if (player1.position.Y + (player1.velocity + player1.acceleration) < GraphicsDevice.Viewport.Height)
+            {
+                player1.velocity += player1.acceleration;
+                player1.position.Y += player1.velocity;
+            }
+
             //Begin Update Code
-            if (currentKeyboardState.IsKeyDown(Keys.Left))
-            {
-                if (player1.position.X - playerMoveSpeed > 0)
-                    player1.position.X -= playerMoveSpeed;
-                else
-                    player1.position.X = 0;
-            }
-            if (currentKeyboardState.IsKeyDown(Keys.Right))
-            {
-                if (player1.position.X + playerMoveSpeed + player1.width < GraphicsDevice.Viewport.Width)
-                    player1.position.X += playerMoveSpeed;
-                else
-                    player1.position.X = GraphicsDevice.Viewport.Width - player1.width;
-            }
             if (currentKeyboardState.IsKeyDown(Keys.Up))
             {
                 if (player1.position.Y - playerMoveSpeed > 0)
@@ -119,27 +116,23 @@ namespace Game
                 else
                     player1.position.Y = 0;
             }
-            if (currentKeyboardState.IsKeyDown(Keys.Down))
+
+            if (currentKeyboardState.IsKeyDown(Keys.Left))
             {
-                if (player1.position.Y + playerMoveSpeed + player2.height < GraphicsDevice.Viewport.Height)
-                    player1.position.Y += playerMoveSpeed;
+                if (player1.position.X - playerMoveSpeed > 0)
+                    player1.position.X -= playerMoveSpeed;
                 else
-                    player1.position.Y = GraphicsDevice.Viewport.Height - player1.height;
+                    player1.position.X = 0;
             }
-            if (currentKeyboardState.IsKeyDown(Keys.A))
+
+            if (currentKeyboardState.IsKeyDown(Keys.Right))
             {
-                if (player2.position.X - playerMoveSpeed > 0)
-                    player2.position.X -= playerMoveSpeed;
+                if (player1.position.X + playerMoveSpeed + player1.width < GraphicsDevice.Viewport.Width)
+                    player1.position.X += playerMoveSpeed;
                 else
-                    player2.position.X = 0;
+                    player1.position.X = GraphicsDevice.Viewport.Width - player1.width;
             }
-            if (currentKeyboardState.IsKeyDown(Keys.D))
-            {
-                if (player2.position.X + playerMoveSpeed + player2.width < GraphicsDevice.Viewport.Width)
-                    player2.position.X += playerMoveSpeed;
-                else
-                    player2.position.X = GraphicsDevice.Viewport.Width - player2.width;
-            }
+
             if (currentKeyboardState.IsKeyDown(Keys.W))
             {
                 if (player2.position.Y - playerMoveSpeed > 0)
@@ -147,12 +140,21 @@ namespace Game
                 else
                     player2.position.Y = 0;
             }
-            if (currentKeyboardState.IsKeyDown(Keys.S))
+
+            if (currentKeyboardState.IsKeyDown(Keys.A))
             {
-                if (player2.position.Y + playerMoveSpeed + player2.height < GraphicsDevice.Viewport.Height)
-                    player2.position.Y += playerMoveSpeed;
+                if (player2.position.X - playerMoveSpeed > 0)
+                    player2.position.X -= playerMoveSpeed;
                 else
-                    player2.position.Y = GraphicsDevice.Viewport.Height - player2.height;
+                    player2.position.X = 0;
+            }
+
+            if (currentKeyboardState.IsKeyDown(Keys.D))
+            {
+                if (player2.position.X + playerMoveSpeed + player2.width < GraphicsDevice.Viewport.Width)
+                    player2.position.X += playerMoveSpeed;
+                else
+                    player2.position.X = GraphicsDevice.Viewport.Width - player2.width;
             }
             //End Update Code
 

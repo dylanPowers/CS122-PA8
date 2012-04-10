@@ -69,7 +69,7 @@ namespace Game
 
             //Begin Loading Code
             Texture2D textureBlock = Content.Load<Texture2D>("brick");
-            Vector2 vectorBlock = new Vector2(50, 50);
+            Vector2 vectorBlock = new Vector2(100, GraphicsDevice.Viewport.Height - textureBlock.Height);
             block1.Initialize(textureBlock, vectorBlock);
 
             Texture2D texturePlayer = Content.Load<Texture2D>("mario");
@@ -99,62 +99,100 @@ namespace Game
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
+            //Begin Update Code
+
             previousKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
 
-            if (player1.position.Y + (player1.velocity + player1.acceleration) < GraphicsDevice.Viewport.Height)
+            if (player1.position.Y + player1.height < GraphicsDevice.Viewport.Height && !player1.onTopOfBlock) //check if player is in mid air
             {
-                player1.velocity += player1.acceleration;
-                player1.position.Y += player1.velocity;
+                player1.airbourne = true;
+            }
+            else
+            {
+                player1.airbourne = false;
+                player1.velocity = 0;
             }
 
-            //Begin Update Code
             if (currentKeyboardState.IsKeyDown(Keys.Up))
             {
-                if (player1.position.Y - playerMoveSpeed > 0)
-                    player1.position.Y -= playerMoveSpeed;
-                else
-                    player1.position.Y = 0;
+                if (!player1.airbourne)
+                {
+                    player1.airbourne = true;
+                    player1.onTopOfBlock = false;
+                    player1.jump();
+                }
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.Left))
             {
                 if (player1.position.X - playerMoveSpeed > 0)
-                    player1.position.X -= playerMoveSpeed;
+                {
+                    if (player1.willCollide(block1, LEFT, playerMoveSpeed)) //if collides with block, players position is on edge of block
+                    {
+                        player1.position.X = block1.position.X + block1.width;
+                    }
+                    else //normal movement
+                    {
+                        player1.position.X -= 10;
+                        if (player1.onTopOfBlock)
+                        {
+                            if (player1.position.X + player1.width < block1.position.X)
+                                player1.onTopOfBlock = false;
+                        }
+                    }
+
+                }
                 else
-                    player1.position.X = 0;
+                {
+                    player1.position.X = 0; //player's pos is on left edge of screen
+                }
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.Right))
             {
-                if (player1.position.X + playerMoveSpeed + player1.width < GraphicsDevice.Viewport.Width)
-                    player1.position.X += playerMoveSpeed;
+                if (player1.position.X + player1.width + playerMoveSpeed < GraphicsDevice.Viewport.Width)
+                {
+                    if (player1.willCollide(block1, RIGHT, playerMoveSpeed)) //if collides with block, players position is on edge of block
+                    {
+                        player1.position.X = block1.position.X - player1.width;
+                    }
+                    else //normal movement
+                    {
+                        player1.position.X += 10;
+                        if (player1.onTopOfBlock)
+                        {
+                            if (player1.position.X > block1.position.X + block1.width)
+                                player1.onTopOfBlock = false;
+                        }
+                    }
+
+                }
                 else
-                    player1.position.X = GraphicsDevice.Viewport.Width - player1.width;
+                {
+                    player1.position.X = GraphicsDevice.Viewport.Width - player1.width; //player's pos is on left edge of screen
+                }
+                
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.W))
+            if (player1.airbourne)
             {
-                if (player2.position.Y - playerMoveSpeed > 0)
-                    player2.position.Y -= playerMoveSpeed;
+                player1.velocity += player1.acceleration;
+                if (player1.willCollide(block1, DOWN, player1.velocity))
+                {
+                    player1.position.Y = block1.position.Y - player1.height;
+                    player1.velocity = 0;
+                    player1.onTopOfBlock = true;
+                }
+                else if (player1.position.Y + player1.velocity + player1.height > GraphicsDevice.Viewport.Height)
+                {
+                    player1.onTopOfBlock = false;
+                    player1.position.Y = GraphicsDevice.Viewport.Height - player1.height;
+                }
                 else
-                    player2.position.Y = 0;
-            }
-
-            if (currentKeyboardState.IsKeyDown(Keys.A))
-            {
-                if (player2.position.X - playerMoveSpeed > 0)
-                    player2.position.X -= playerMoveSpeed;
-                else
-                    player2.position.X = 0;
-            }
-
-            if (currentKeyboardState.IsKeyDown(Keys.D))
-            {
-                if (player2.position.X + playerMoveSpeed + player2.width < GraphicsDevice.Viewport.Width)
-                    player2.position.X += playerMoveSpeed;
-                else
-                    player2.position.X = GraphicsDevice.Viewport.Width - player2.width;
+                {
+                    player1.position.Y += player1.velocity;
+                }
             }
             //End Update Code
 

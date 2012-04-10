@@ -49,15 +49,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="brick.png">
-      <Name>brick</Name>
+    <Compile Include="mario.png">
+      <Name>mario</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="mario.png">
-      <Name>mario</Name>
+    <Compile Include="brick.png">
+      <Name>brick</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

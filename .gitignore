@@ -7,3 +7,6 @@ Game/GameContent/obj/
 
 # Ignore user option files
 *.suo
+
+# Ignore cache files
+*.cachefile

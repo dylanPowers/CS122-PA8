@@ -238,7 +238,6 @@ namespace Game
                     {
                         player1.position.Y = blocks[i].position.Y + player1.height;
                         player1.velocity = 0;
-
                         break;
                     }
                 }

@@ -129,6 +129,10 @@ namespace Game
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
+            // Resets the game when the escape key is pressed
+            if (currentKeyboardState.IsKeyDown(Keys.Escape))
+                this.Initialize();
+
             //Begin Update Code
 
             previousKeyboardState = currentKeyboardState;
@@ -150,7 +154,7 @@ namespace Game
                 {
                     player1.airbourne = true;
                     player1.onTopOfBlock = false;
-                    //beep.Play();
+                    beep.Play();
                     player1.jump();
                 }
             }

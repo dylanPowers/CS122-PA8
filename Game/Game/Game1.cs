@@ -129,9 +129,9 @@ namespace Game
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            // Resets the game when the escape key is pressed
+            // Resets the character when the escape key is pressed
             if (currentKeyboardState.IsKeyDown(Keys.Escape))
-                this.Initialize();
+                this.player1.position = new Vector2(100, GraphicsDevice.Viewport.Height - player1TextureLeft.Height);
 
             //Begin Update Code
 

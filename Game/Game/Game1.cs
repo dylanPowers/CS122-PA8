@@ -22,7 +22,7 @@ namespace Game
         KeyboardState previousKeyboardState;
 
         //Begin Declaration Code
-        Block block1;
+        List<Block> blocks;
         Player player1;
         Player player2;
 
@@ -32,6 +32,13 @@ namespace Game
         const int DOWN = 2;
         const int LEFT = 3;
         const int RIGHT = 4;
+
+        SoundEffect beep;
+
+        Texture2D player1TextureLeft;
+        Texture2D player1TextureRight;
+        Texture2D player2TextureLeft;
+        Texture2D player2TextureRight;
         //End Declaration Code
 
         public Game1()
@@ -48,8 +55,14 @@ namespace Game
         /// </summary>
         protected override void Initialize()
         {
+            graphics.PreferredBackBufferWidth = 1200;
+            graphics.PreferredBackBufferHeight = 600;
+            graphics.ApplyChanges();
+
             //Begin Initialization Code
-            block1 = new Block();
+            blocks = new List<Block>();
+            for (int i = 0; i < 14; i++ ) //add needed number of blocks to block list
+                blocks.Add(new Block());
             player1 = new Player();
             player2 = new Player();
             playerMoveSpeed = 10;
@@ -69,13 +82,30 @@ namespace Game
 
             //Begin Loading Code
             Texture2D textureBlock = Content.Load<Texture2D>("brick");
-            Vector2 vectorBlock = new Vector2(100, GraphicsDevice.Viewport.Height - textureBlock.Height);
-            block1.Initialize(textureBlock, vectorBlock);
+            blocks[0].Initialize(textureBlock, new Vector2(0, GraphicsDevice.Viewport.Height - textureBlock.Height));
+            blocks[1].Initialize(textureBlock, new Vector2(150, GraphicsDevice.Viewport.Height - textureBlock.Height));
+            blocks[2].Initialize(textureBlock, new Vector2(150, GraphicsDevice.Viewport.Height - (textureBlock.Height * 2)));
+            blocks[3].Initialize(textureBlock, new Vector2(150, GraphicsDevice.Viewport.Height - (textureBlock.Height * 3)));
+            blocks[4].Initialize(textureBlock, new Vector2(150, GraphicsDevice.Viewport.Height - (textureBlock.Height * 4)));
+            blocks[5].Initialize(textureBlock, new Vector2(150, GraphicsDevice.Viewport.Height - (textureBlock.Height * 5)));
+            blocks[6].Initialize(textureBlock, new Vector2(150, GraphicsDevice.Viewport.Height - (textureBlock.Height * 6)));
+            blocks[7].Initialize(textureBlock, new Vector2(150, GraphicsDevice.Viewport.Height - (textureBlock.Height * 7)));
+            blocks[8].Initialize(textureBlock, new Vector2(150, GraphicsDevice.Viewport.Height - (textureBlock.Height * 8)));
+            blocks[9].Initialize(textureBlock, new Vector2(150, GraphicsDevice.Viewport.Height - (textureBlock.Height * 9)));
+            blocks[10].Initialize(textureBlock, new Vector2(150, GraphicsDevice.Viewport.Height - (textureBlock.Height * 10)));
+            blocks[11].Initialize(textureBlock, new Vector2(100, GraphicsDevice.Viewport.Height - (textureBlock.Height * 4)));
+            blocks[12].Initialize(textureBlock, new Vector2(0, GraphicsDevice.Viewport.Height - (textureBlock.Height * 7)));
+            blocks[13].Initialize(textureBlock, new Vector2(100, GraphicsDevice.Viewport.Height - (textureBlock.Height * 10)));
 
-            Texture2D texturePlayer = Content.Load<Texture2D>("mario");
-            Vector2 playerVector = new Vector2(100, 100);
-            player1.Initialize(texturePlayer, playerVector);
-            player2.Initialize(texturePlayer, playerVector);
+            player1TextureLeft = Content.Load<Texture2D>("player_purple_left");
+            player1TextureRight = Content.Load<Texture2D>("player_purple_right");
+            player2TextureLeft = Content.Load<Texture2D>("player_yellow_left");
+            player2TextureRight = Content.Load<Texture2D>("player_yellow_right");
+            Vector2 playerVector = new Vector2(100, GraphicsDevice.Viewport.Height - player1TextureLeft.Height);
+            player1.Initialize(player1TextureLeft, playerVector);
+            //player2.Initialize(playerTexture2, playerVector);
+
+            beep = Content.Load<SoundEffect>("beep");
             //End Loading Code
         }
 
@@ -120,24 +150,32 @@ namespace Game
                 {
                     player1.airbourne = true;
                     player1.onTopOfBlock = false;
+                    //beep.Play();
                     player1.jump();
                 }
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.Left))
             {
+                player1.texture = player1TextureLeft;
+                bool isColliding = false;
+
                 if (player1.position.X - playerMoveSpeed > 0)
                 {
-                    if (player1.willCollide(block1, LEFT, playerMoveSpeed)) //if collides with block, players position is on edge of block
+                    for (int i = 0; i < blocks.Count; i++ )
                     {
-                        player1.position.X = block1.position.X + block1.width;
+                        if (player1.willCollide(blocks[i], LEFT, playerMoveSpeed)) //if collides with block, player's position is on edge of block
+                        {
+                            player1.position.X = blocks[i].position.X + blocks[i].width;
+                            isColliding = true;
+                        }
                     }
-                    else //normal movement
+                    if(!isColliding)//normal movement
                     {
                         player1.position.X -= 10;
                         if (player1.onTopOfBlock)
                         {
-                            if (player1.position.X + player1.width < block1.position.X)
+                            if (player1.position.X + player1.width <= blocks[player1.whichBlock].position.X)
                                 player1.onTopOfBlock = false;
                         }
                     }
@@ -151,18 +189,25 @@ namespace Game
 
             if (currentKeyboardState.IsKeyDown(Keys.Right))
             {
+                player1.texture = player1TextureRight;
+                bool isColliding = false;
+
                 if (player1.position.X + player1.width + playerMoveSpeed < GraphicsDevice.Viewport.Width)
                 {
-                    if (player1.willCollide(block1, RIGHT, playerMoveSpeed)) //if collides with block, players position is on edge of block
+                    for (int i = 0; i < blocks.Count; i++)
                     {
-                        player1.position.X = block1.position.X - player1.width;
+                        if (player1.willCollide(blocks[i], RIGHT, playerMoveSpeed)) //if collides with block, player's position is on edge of block
+                        {
+                            player1.position.X = blocks[i].position.X - player1.width;
+                            isColliding = true;
+                        }
                     }
-                    else //normal movement
+                    if(!isColliding) //normal movement
                     {
                         player1.position.X += 10;
                         if (player1.onTopOfBlock)
                         {
-                            if (player1.position.X > block1.position.X + block1.width)
+                            if (player1.position.X >= blocks[0].position.X + blocks[0].width)
                                 player1.onTopOfBlock = false;
                         }
                     }
@@ -177,19 +222,32 @@ namespace Game
 
             if (player1.airbourne)
             {
+                player1.onTopOfBlock = false;
                 player1.velocity += player1.acceleration;
-                if (player1.willCollide(block1, DOWN, player1.velocity))
+                for (int i = 0; i < blocks.Count; i++ )
                 {
-                    player1.position.Y = block1.position.Y - player1.height;
-                    player1.velocity = 0;
-                    player1.onTopOfBlock = true;
+                    if (player1.willCollide(blocks[i], DOWN, player1.velocity) && player1.velocity > 0)
+                    {
+                        player1.position.Y = blocks[i].position.Y - player1.height;
+                        player1.velocity = 0;
+                        player1.onTopOfBlock = true;
+                        player1.whichBlock = i;
+                        break;
+                    }
+                    if (player1.willCollide(blocks[i], DOWN, player1.velocity) && player1.velocity < 0)
+                    {
+                        player1.position.Y = blocks[i].position.Y + player1.height;
+                        player1.velocity = 0;
+
+                        break;
+                    }
                 }
-                else if (player1.position.Y + player1.velocity + player1.height > GraphicsDevice.Viewport.Height)
+                if (player1.position.Y + player1.velocity + player1.height > GraphicsDevice.Viewport.Height && !player1.onTopOfBlock)
                 {
                     player1.onTopOfBlock = false;
                     player1.position.Y = GraphicsDevice.Viewport.Height - player1.height;
                 }
-                else
+                else if(!player1.onTopOfBlock)
                 {
                     player1.position.Y += player1.velocity;
                 }
@@ -210,7 +268,10 @@ namespace Game
             spriteBatch.Begin();
 
             // Begin Drawing Code
-            block1.Draw(spriteBatch);
+            for (int i = 0; i < blocks.Count; i++)
+            {
+                blocks[i].Draw(spriteBatch);
+            }
             player1.Draw(spriteBatch);
             player2.Draw(spriteBatch);
             // End Drawing Code

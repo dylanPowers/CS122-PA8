@@ -9,22 +9,21 @@ namespace Game
 {
     class Player : Block
     {
-        public int health;
         public int acceleration;
         public int velocity;
         public bool onTopOfBlock;
+        public int whichBlock;
 
         public bool airbourne;
 
         public void jump()
         {
-            velocity = -40;
+            velocity = -35;
         }
 
         public override void Initialize(Texture2D initTexture, Vector2 initPosition)
         {
             base.Initialize(initTexture, initPosition);
-            health = 5;
             acceleration = 3;
             velocity = 0;
             onTopOfBlock = false;

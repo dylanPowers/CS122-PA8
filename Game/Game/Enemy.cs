@@ -7,26 +7,16 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Game
 {
-    class Player : Block
+    class Enemy : Block
     {
-        public int acceleration;
-        public int velocity;
-        public bool onTopOfBlock;
-        public int whichBlock;
-
-        public bool airbourne;
-
-        public void jump()
-        {
-            velocity = -35;
-        }
+        public int speed;
+        public bool goingLeft;
 
         public override void Initialize(Texture2D initTexture, Vector2 initPosition)
         {
             base.Initialize(initTexture, initPosition);
-            acceleration = 3;
-            velocity = 0;
-            onTopOfBlock = false;
+            speed = 5;
+            goingLeft = true;
         }
     }
 }

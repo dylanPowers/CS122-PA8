@@ -196,6 +196,10 @@ namespace Game
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
+            // Resets the character when the escape key is pressed
+            if (currentKeyboardState.IsKeyDown(Keys.Escape))
+                this.player1.position = new Vector2(100, GraphicsDevice.Viewport.Height - player1TextureLeft.Height);
+
             //Begin Update Code
 
 //PLAYER UPDATE CODE
@@ -218,7 +222,7 @@ namespace Game
                 {
                     player1.airbourne = true;
                     player1.onTopOfBlock = false;
-                    //beep.Play();
+                    beep.Play();
                     player1.jump();
                 }
             }

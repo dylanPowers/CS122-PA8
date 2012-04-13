@@ -283,5 +283,10 @@ namespace Game
 
             base.Draw(gameTime);
         }
+
+        private void ShootGun(){
+
+
+        }
     }
 }

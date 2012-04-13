@@ -39,6 +39,13 @@ namespace Game
                 case 3: obj1Rectangle.X -= speed; break;    //left
                 case 4: obj1Rectangle.X += speed; break;    //right
             }
+            String box = "Hello";
+            switch (box)
+            {
+                case "Hello":
+                    box = "too";
+                    break;
+            }
             Rectangle obj2Rectangle = new Rectangle((int)obj2.position.X, (int)obj2.position.Y, obj2.width, obj2.height);
 
             return obj1Rectangle.Intersects(obj2Rectangle);

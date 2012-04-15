@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Game
 {
-    class Enemy : Block
+    class Enemy : MovableBlock
     {
         public int speed;
         public bool goingLeft;

@@ -76,7 +76,7 @@ namespace Game
                 spikes.Add(new Block()); //add needed number of spikes to spike list
             player1 = new Player();
             player2 = new Player();
-            playerMoveSpeed = 10;
+            playerMoveSpeed = 8;
 
             enemy1 = new Enemy();
             //End Initialization Code
@@ -222,7 +222,7 @@ namespace Game
                 {
                     player1.airbourne = true;
                     player1.onTopOfBlock = false;
-                    beep.Play();
+                    //beep.Play();
                     player1.jump();
                 }
             }

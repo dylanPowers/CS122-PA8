@@ -27,6 +27,8 @@ namespace Game
         Player player1;
         Player player2;
 
+        Block door;
+
         Enemy enemy1;
 
         int playerMoveSpeed;
@@ -36,14 +38,19 @@ namespace Game
         const int LEFT = 3;
         const int RIGHT = 4;
 
-        SoundEffect beep;
+        const int NUMBLOCKS = 50;
+        const int NUMSPIKES = 19;
+
+        SoundEffect jumpSound;
+        Song music;
 
         Texture2D player1TextureLeft;
         Texture2D player1TextureRight;
         Texture2D player2TextureLeft;
         Texture2D player2TextureRight;
 
-        Texture2D spikeTexture;
+        Texture2D spikeUpTexture;
+        Texture2D spikeDownTexture;
 
         Texture2D enemyTextureLeft;
         Texture2D enemyTextureRight;
@@ -68,15 +75,20 @@ namespace Game
             graphics.ApplyChanges();
 
             //Begin Initialization Code
+            music = Content.Load<Song>("music");
+            //MediaPlayer.Play(music);
+
             blocks = new List<Block>();
             spikes = new List<Block>();
-            for (int i = 0; i < 50; i++ ) //add needed number of blocks to block list
+            for (int i = 0; i < NUMBLOCKS; i++ ) //add needed number of blocks to block list
                 blocks.Add(new Block());
-            for (int i = 0; i < 11; i++)
+            for (int i = 0; i < NUMSPIKES; i++)
                 spikes.Add(new Block()); //add needed number of spikes to spike list
             player1 = new Player();
             player2 = new Player();
             playerMoveSpeed = 8;
+
+            door = new Block();
 
             enemy1 = new Enemy();
             //End Initialization Code
@@ -146,18 +158,27 @@ namespace Game
             blocks[48].Initialize(textureBlock, new Vector2(600, 450));
             blocks[49].Initialize(textureBlock, new Vector2(600, 400));
 
-            spikeTexture = Content.Load<Texture2D>("spike");
-            spikes[0].Initialize(spikeTexture, new Vector2(750, 425));
-            spikes[1].Initialize(spikeTexture, new Vector2(800, 425));
-            spikes[2].Initialize(spikeTexture, new Vector2(850, 425));
-            spikes[3].Initialize(spikeTexture, new Vector2(900, 425));
-            spikes[4].Initialize(spikeTexture, new Vector2(950, 425));
-            spikes[5].Initialize(spikeTexture, new Vector2(1000, 425));
-            spikes[6].Initialize(spikeTexture, new Vector2(1050, 425));
-            spikes[7].Initialize(spikeTexture, new Vector2(1100, 425));
-            spikes[8].Initialize(spikeTexture, new Vector2(1150, 425));
-            spikes[9].Initialize(spikeTexture, new Vector2(650, 425));
-            spikes[10].Initialize(spikeTexture, new Vector2(700, 425));
+            spikeUpTexture = Content.Load<Texture2D>("spike");
+            spikeDownTexture = Content.Load<Texture2D>("spike_upsidedown");
+            spikes[0].Initialize(spikeUpTexture, new Vector2(750, 425));
+            spikes[1].Initialize(spikeUpTexture, new Vector2(800, 425));
+            spikes[2].Initialize(spikeUpTexture, new Vector2(850, 425));
+            spikes[3].Initialize(spikeUpTexture, new Vector2(900, 425));
+            spikes[4].Initialize(spikeUpTexture, new Vector2(950, 425));
+            spikes[5].Initialize(spikeUpTexture, new Vector2(1000, 425));
+            spikes[6].Initialize(spikeUpTexture, new Vector2(1050, 425));
+            spikes[7].Initialize(spikeUpTexture, new Vector2(1100, 425));
+            spikes[8].Initialize(spikeUpTexture, new Vector2(1150, 425));
+            spikes[9].Initialize(spikeUpTexture, new Vector2(650, 425));
+            spikes[10].Initialize(spikeUpTexture, new Vector2(700, 425));
+            spikes[11].Initialize(spikeUpTexture, new Vector2(600, 75));
+            spikes[12].Initialize(spikeDownTexture, new Vector2(725, 0));
+            spikes[13].Initialize(spikeUpTexture, new Vector2(850, 75));
+            spikes[14].Initialize(spikeUpTexture, new Vector2(900, 75));
+            spikes[15].Initialize(spikeUpTexture, new Vector2(950, 75));
+            spikes[16].Initialize(spikeDownTexture, new Vector2(100, 150));
+            spikes[17].Initialize(spikeDownTexture, new Vector2(0, 300));
+            spikes[18].Initialize(spikeDownTexture, new Vector2(100, 450));
 
             player1TextureLeft = Content.Load<Texture2D>("player_purple_left");
             player1TextureRight = Content.Load<Texture2D>("player_purple_right");
@@ -167,12 +188,14 @@ namespace Game
             player1.Initialize(player1TextureLeft, playerVector);
             //player2.Initialize(playerTexture2, playerVector);
 
+            door.Initialize(Content.Load<Texture2D>("door"), new Vector2(1150, 500));
+
             Vector2 enemyVector = new Vector2(550, 150);
             enemyTextureLeft = Content.Load<Texture2D>("enemy_left");
             enemyTextureRight = Content.Load<Texture2D>("enemy_right");
             enemy1.Initialize(enemyTextureLeft, enemyVector);
 
-            beep = Content.Load<SoundEffect>("beep");
+            jumpSound = Content.Load<SoundEffect>("beep");
             //End Loading Code
         }
 
@@ -320,6 +343,7 @@ namespace Game
                     {
                         player1.position.X = 100;
                         player1.position.Y = GraphicsDevice.Viewport.Height - player1TextureLeft.Height;
+                        player1.velocity = 0;
                     }
                 }
                 if (player1.position.Y + player1.velocity + player1.height > GraphicsDevice.Viewport.Height && !player1.onTopOfBlock) //if player lands on bottom of screen
@@ -348,6 +372,7 @@ namespace Game
                     {
                         player1.position.X = 100;
                         player1.position.Y = GraphicsDevice.Viewport.Height - player1TextureLeft.Height;
+                        player1.velocity = 0;
                     }
                     enemy1.position.X -= enemy1.speed; //moves enemy forward
                 }
@@ -398,10 +423,12 @@ namespace Game
                 spikes[i].Draw(spriteBatch);
             }
 
-            player1.Draw(spriteBatch);
-            player2.Draw(spriteBatch);
+            door.Draw(spriteBatch);
 
             enemy1.Draw(spriteBatch);
+
+            player1.Draw(spriteBatch);
+            player2.Draw(spriteBatch);
             // End Drawing Code
 
             spriteBatch.End();

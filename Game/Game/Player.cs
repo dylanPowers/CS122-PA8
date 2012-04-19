@@ -18,13 +18,13 @@ namespace Game
 
         public void jump()
         {
-            velocity = -19;
+            velocity = -28;
         }
 
         public override void Initialize(Texture2D initTexture, Vector2 initPosition)
         {
             base.Initialize(initTexture, initPosition);
-            acceleration = 1;
+            acceleration = 2;
             velocity = 0;
             onTopOfBlock = false;
         }

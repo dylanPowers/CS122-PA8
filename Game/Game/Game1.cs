@@ -24,12 +24,15 @@ namespace Game
         //Begin Declaration Code
         List<Block> blocks;
         List<Block> spikes;
+        List<Enemy> enemies;
         Player player1;
         Player player2;
 
-        Block door;
+        int NUMBLOCKS;
+        int NUMSPIKES;
+        int NUMENEMIES;
 
-        Enemy enemy1;
+        Block door;
 
         int playerMoveSpeed;
 
@@ -38,9 +41,6 @@ namespace Game
         const int LEFT = 3;
         const int RIGHT = 4;
 
-        const int NUMBLOCKS = 50;
-        const int NUMSPIKES = 19;
-
         SoundEffect jumpSound;
         Song music;
 
@@ -48,6 +48,8 @@ namespace Game
         Texture2D player1TextureRight;
         Texture2D player2TextureLeft;
         Texture2D player2TextureRight;
+
+        Texture2D blockTexture;
 
         Texture2D spikeUpTexture;
         Texture2D spikeDownTexture;
@@ -80,20 +82,16 @@ namespace Game
 
             blocks = new List<Block>();
             spikes = new List<Block>();
-            for (int i = 0; i < NUMBLOCKS; i++ ) //add needed number of blocks to block list
-                blocks.Add(new Block());
-            for (int i = 0; i < NUMSPIKES; i++)
-                spikes.Add(new Block()); //add needed number of spikes to spike list
+            enemies = new List<Enemy>();
             player1 = new Player();
             player2 = new Player();
             playerMoveSpeed = 8;
 
             door = new Block();
-
-            enemy1 = new Enemy();
             //End Initialization Code
 
             base.Initialize();
+            loadLevel(1);
         }
 
         /// <summary>
@@ -106,94 +104,23 @@ namespace Game
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             //Begin Loading Code
-            Texture2D textureBlock = Content.Load<Texture2D>("brick");
-            blocks[0].Initialize(textureBlock, new Vector2(0, 550));
-            blocks[1].Initialize(textureBlock, new Vector2(150, 550));
-            blocks[2].Initialize(textureBlock, new Vector2(150, 500));
-            blocks[3].Initialize(textureBlock, new Vector2(150, 450));
-            blocks[4].Initialize(textureBlock, new Vector2(150, 400));
-            blocks[5].Initialize(textureBlock, new Vector2(150, 350));
-            blocks[6].Initialize(textureBlock, new Vector2(150, 300));
-            blocks[7].Initialize(textureBlock, new Vector2(150, 250));
-            blocks[8].Initialize(textureBlock, new Vector2(150, 200));
-            blocks[9].Initialize(textureBlock, new Vector2(150, 150));
-            blocks[10].Initialize(textureBlock, new Vector2(150, 100));
-            blocks[11].Initialize(textureBlock, new Vector2(100, 400));
-            blocks[12].Initialize(textureBlock, new Vector2(0, 250));
-            blocks[13].Initialize(textureBlock, new Vector2(100, 100));
-            blocks[14].Initialize(textureBlock, new Vector2(200, 200));
-            blocks[15].Initialize(textureBlock, new Vector2(250, 200));
-            blocks[16].Initialize(textureBlock, new Vector2(300, 200));
-            blocks[17].Initialize(textureBlock, new Vector2(350, 200));
-            blocks[18].Initialize(textureBlock, new Vector2(400, 200));
-            blocks[19].Initialize(textureBlock, new Vector2(450, 200));
-            blocks[20].Initialize(textureBlock, new Vector2(500, 200));
-            blocks[21].Initialize(textureBlock, new Vector2(550, 200));
-            blocks[22].Initialize(textureBlock, new Vector2(600, 200));
-            blocks[23].Initialize(textureBlock, new Vector2(600, 150));
-            blocks[24].Initialize(textureBlock, new Vector2(600, 100));
-            blocks[25].Initialize(textureBlock, new Vector2(650, 100));
-            blocks[26].Initialize(textureBlock, new Vector2(700, 100));
-            blocks[27].Initialize(textureBlock, new Vector2(750, 100));
-            blocks[28].Initialize(textureBlock, new Vector2(800, 100));
-            blocks[29].Initialize(textureBlock, new Vector2(850, 100));
-            blocks[30].Initialize(textureBlock, new Vector2(900, 100));
-            blocks[31].Initialize(textureBlock, new Vector2(950, 100));
-            blocks[32].Initialize(textureBlock, new Vector2(750, 300));
-            blocks[33].Initialize(textureBlock, new Vector2(800, 300));
-            blocks[34].Initialize(textureBlock, new Vector2(950, 300));
-            blocks[35].Initialize(textureBlock, new Vector2(1100, 350));
-            blocks[36].Initialize(textureBlock, new Vector2(1150, 350));
-            blocks[37].Initialize(textureBlock, new Vector2(1150, 450));
-            blocks[38].Initialize(textureBlock, new Vector2(1100, 450));
-            blocks[39].Initialize(textureBlock, new Vector2(1050, 450));
-            blocks[40].Initialize(textureBlock, new Vector2(1000, 450));
-            blocks[41].Initialize(textureBlock, new Vector2(950, 450));
-            blocks[42].Initialize(textureBlock, new Vector2(900, 450));
-            blocks[43].Initialize(textureBlock, new Vector2(850, 450));
-            blocks[44].Initialize(textureBlock, new Vector2(800, 450));
-            blocks[45].Initialize(textureBlock, new Vector2(750, 450));
-            blocks[46].Initialize(textureBlock, new Vector2(700, 450));
-            blocks[47].Initialize(textureBlock, new Vector2(650, 450));
-            blocks[48].Initialize(textureBlock, new Vector2(600, 450));
-            blocks[49].Initialize(textureBlock, new Vector2(600, 400));
+            blockTexture = Content.Load<Texture2D>("brick");
 
             spikeUpTexture = Content.Load<Texture2D>("spike");
             spikeDownTexture = Content.Load<Texture2D>("spike_upsidedown");
-            spikes[0].Initialize(spikeUpTexture, new Vector2(750, 425));
-            spikes[1].Initialize(spikeUpTexture, new Vector2(800, 425));
-            spikes[2].Initialize(spikeUpTexture, new Vector2(850, 425));
-            spikes[3].Initialize(spikeUpTexture, new Vector2(900, 425));
-            spikes[4].Initialize(spikeUpTexture, new Vector2(950, 425));
-            spikes[5].Initialize(spikeUpTexture, new Vector2(1000, 425));
-            spikes[6].Initialize(spikeUpTexture, new Vector2(1050, 425));
-            spikes[7].Initialize(spikeUpTexture, new Vector2(1100, 425));
-            spikes[8].Initialize(spikeUpTexture, new Vector2(1150, 425));
-            spikes[9].Initialize(spikeUpTexture, new Vector2(650, 425));
-            spikes[10].Initialize(spikeUpTexture, new Vector2(700, 425));
-            spikes[11].Initialize(spikeUpTexture, new Vector2(600, 75));
-            spikes[12].Initialize(spikeDownTexture, new Vector2(725, 0));
-            spikes[13].Initialize(spikeUpTexture, new Vector2(850, 75));
-            spikes[14].Initialize(spikeUpTexture, new Vector2(900, 75));
-            spikes[15].Initialize(spikeUpTexture, new Vector2(950, 75));
-            spikes[16].Initialize(spikeDownTexture, new Vector2(100, 150));
-            spikes[17].Initialize(spikeDownTexture, new Vector2(0, 300));
-            spikes[18].Initialize(spikeDownTexture, new Vector2(100, 450));
 
             player1TextureLeft = Content.Load<Texture2D>("player_purple_left");
             player1TextureRight = Content.Load<Texture2D>("player_purple_right");
             player2TextureLeft = Content.Load<Texture2D>("player_yellow_left");
             player2TextureRight = Content.Load<Texture2D>("player_yellow_right");
-            Vector2 playerVector = new Vector2(100, GraphicsDevice.Viewport.Height - player1TextureLeft.Height);
-            player1.Initialize(player1TextureLeft, playerVector);
-            //player2.Initialize(playerTexture2, playerVector);
 
-            door.Initialize(Content.Load<Texture2D>("door"), new Vector2(1150, 500));
+            player1.Initialize(player1TextureLeft, new Vector2(0, 0));
+            player2.Initialize(player2TextureLeft, new Vector2(0, 0));
 
-            Vector2 enemyVector = new Vector2(550, 150);
+            door.Initialize(Content.Load<Texture2D>("door"), new Vector2(0, 0));
+
             enemyTextureLeft = Content.Load<Texture2D>("enemy_left");
             enemyTextureRight = Content.Load<Texture2D>("enemy_right");
-            enemy1.Initialize(enemyTextureLeft, enemyVector);
 
             jumpSound = Content.Load<SoundEffect>("beep");
             //End Loading Code
@@ -358,45 +285,57 @@ namespace Game
             }
 
 //ENEMY UPDATE CODE
-            if (enemy1.goingLeft)
+            for(int i = 0; i < enemies.Count; i++)
             {
-                if (enemy1.willCollide(blocks[9], LEFT, enemy1.speed)) //if enemy collides with leftmost block, turns around
+                if (enemies[i].goingLeft)
                 {
-                    enemy1.position.X = blocks[9].position.X + blocks[9].width;
-                    enemy1.goingLeft = false;
-                    enemy1.texture = enemyTextureRight;
+                    bool isColliding = false;
+                    for(int i2 = 0; i2 < blocks.Count; i2++)
+                    {
+                        if (enemies[i].willCollide(blocks[i2], LEFT, enemies[i].speed)) //if enemy collides with a block, turns around
+                        {
+                            enemies[i].position.X = blocks[i2].position.X + blocks[i2].width;
+                            enemies[i].goingLeft = false;
+                            enemies[i].texture = enemyTextureRight;
+                            isColliding = true;
+                        }
+                    }
+                    if(!isColliding)
+                    {
+                        if (enemies[i].willCollide(player1, LEFT, enemies[i].speed)) //if enemy touches player send player back to start
+                        {
+                            player1.position.X = 100;
+                            player1.position.Y = GraphicsDevice.Viewport.Height - player1TextureLeft.Height;
+                            player1.velocity = 0;
+                        }
+                        enemies[i].position.X -= enemies[i].speed; //moves enemy forward
+                    }
                 }
                 else
                 {
-                    if (enemy1.willCollide(player1, LEFT, enemy1.speed)) //if enemy touches player send player back to start
+                    bool isColliding = false;
+                    for(int i2 = 0; i2 < blocks.Count; i2++)
                     {
-                        player1.position.X = 100;
-                        player1.position.Y = GraphicsDevice.Viewport.Height - player1TextureLeft.Height;
-                        player1.velocity = 0;
+                        if (enemies[i].willCollide(blocks[i2], RIGHT, enemies[i].speed)) //if enemy collides with a block, turns around
+                        {
+                            enemies[i].position.X = blocks[i2].position.X - enemies[i].width;
+                            enemies[i].goingLeft = true;
+                            enemies[i].texture = enemyTextureLeft;
+                            isColliding = true;
+                        }
                     }
-                    enemy1.position.X -= enemy1.speed; //moves enemy forward
+                    if(!isColliding)
+                    {
+                        if (enemies[i].willCollide(player1, RIGHT, enemies[i].speed)) //if enemy touches player send player back to start
+                        {
+                            player1.position.X = 100;
+                            player1.position.Y = GraphicsDevice.Viewport.Height - player1TextureLeft.Height;
+                        }
+
+                        enemies[i].position.X += enemies[i].speed; //moves enemy forward
+                    }
                 }
             }
-            else
-            {
-                if (enemy1.willCollide(blocks[23], RIGHT, enemy1.speed)) //if enemy collides with rightmost block, turns around
-                {
-                    enemy1.position.X = blocks[23].position.X - enemy1.width;
-                    enemy1.goingLeft = true;
-                    enemy1.texture = enemyTextureLeft;
-                }
-                else
-                {
-                    if (enemy1.willCollide(player1, RIGHT, enemy1.speed)) //if enemy touches player send player back to start
-                    {
-                        player1.position.X = 100;
-                        player1.position.Y = GraphicsDevice.Viewport.Height - player1TextureLeft.Height;
-                    }
-
-                    enemy1.position.X += enemy1.speed; //moves enemy forward
-                }
-            }
-
             //End Update Code
 
             base.Update(gameTime);
@@ -425,7 +364,10 @@ namespace Game
 
             door.Draw(spriteBatch);
 
-            enemy1.Draw(spriteBatch);
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                enemies[i].Draw(spriteBatch);
+            }
 
             player1.Draw(spriteBatch);
             player2.Draw(spriteBatch);
@@ -435,5 +377,81 @@ namespace Game
 
             base.Draw(gameTime);
         }
+
+        private void loadLevel(int level)
+        {
+            blocks.Clear();
+            spikes.Clear();
+            enemies.Clear();
+            NUMBLOCKS = NUMSPIKES = NUMENEMIES = 0;
+
+            string levelName = "Content/level";
+            levelName += level;
+            levelName += ".txt";
+            string[] lines = System.IO.File.ReadAllLines(levelName);
+            int i = 1;
+            string[] coordinates;
+
+            //load blocks
+            while (lines[i] != "")
+            {
+                NUMBLOCKS++;
+                blocks.Add(new Block());
+                coordinates = lines[i].Split(' ');
+                blocks[NUMBLOCKS - 1].Initialize(blockTexture, new Vector2(Convert.ToInt32(coordinates[0]), Convert.ToInt32(coordinates[1])));
+                i++;
+            }
+
+            i+=2; //skips over title and blank line
+
+            //load upspikes
+            while (lines[i] != "")
+            {
+                NUMSPIKES++;
+                spikes.Add(new Block());
+                coordinates = lines[i].Split(' ');
+                spikes[NUMSPIKES - 1].Initialize(spikeUpTexture, new Vector2(Convert.ToInt32(coordinates[0]), Convert.ToInt32(coordinates[1])));
+                i++;
+            }
+
+            i+=2; //skips over title and blank line
+
+            //load downspikes
+            while (lines[i] != "")
+            {
+                NUMSPIKES++;
+                spikes.Add(new Block());
+                coordinates = lines[i].Split(' ');
+                spikes[NUMSPIKES - 1].Initialize(spikeDownTexture, new Vector2(Convert.ToInt32(coordinates[0]), Convert.ToInt32(coordinates[1])));
+                i++;
+            }
+
+            i+=2; //skips over title and blank line
+
+            //load enemies
+            while (lines[i] != "")
+            {
+                NUMENEMIES++;
+                enemies.Add(new Enemy());
+                coordinates = lines[i].Split(' ');
+                enemies[NUMENEMIES - 1].Initialize(enemyTextureLeft, new Vector2(Convert.ToInt32(coordinates[0]), Convert.ToInt32(coordinates[1])));
+                i++;
+            }
+
+            i+=2; //skips over title and blank line
+
+            coordinates = lines[i].Split(' ');
+            player1.position.X = float.Parse(coordinates[0]);
+            player1.position.Y = float.Parse(coordinates[1]);
+            player2.position.X = float.Parse(coordinates[0]);
+            player2.position.Y = float.Parse(coordinates[1]);
+
+            i+=3; //skips over title and blank line
+
+            coordinates = lines[i].Split(' ');
+            door.position.X = float.Parse(coordinates[0]);
+            door.position.Y = float.Parse(coordinates[1]);
+        }
     }
 }
+

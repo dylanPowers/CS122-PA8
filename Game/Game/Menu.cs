@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 
 
 namespace Game
@@ -26,11 +27,22 @@ namespace Game
             is_active = false;
             exit_flag = false;
             restart_flag = false;
+            restart_but_pos.X = 600;
+            restart_but_pos.Y = 300;
+            exit_but_pos.X = 800;
+            exit_but_pos.Y = 300;
         }
 
-        void draw()
+        void LoadContent(ref ContentManager Content)
         {
+            restart_button = Content.Load<Texture2D>("Content/MenuContent/RestartMenuButton");
+            exit_button = Content.Load<Texture2D>("Content/MenuContent/ExitMenuButton");
+        }
 
+        void draw(ref SpriteBatch sprites)
+        {
+            sprites.Draw(restart_button, restart_but_pos, Color.White);
+            sprites.Draw(exit_button, exit_but_pos, Color.White);
         }
 
         void setActive()
@@ -48,8 +60,11 @@ namespace Game
                 }
                 else
                 {
+                    mouse_viewable = true;
                     MouseState mouse = Mouse.GetState();
                 }
+
+                mouse_viewable = false;
             }
         }
 

@@ -32,6 +32,8 @@ namespace Game
         int NUMSPIKES;
         int NUMENEMIES;
 
+        Vector2 playerStart;
+
         Block door;
 
         int playerMoveSpeed;
@@ -189,9 +191,21 @@ namespace Game
                         if (player1.willCollide(blocks[i], LEFT, playerMoveSpeed)) //if collides with block, player's position is on edge of block
                         {
                             player1.position.X = blocks[i].position.X + blocks[i].width;
-                            isColliding = true; break;
+                            isColliding = true;
+                            break;
                         }
                     }
+
+                    for (int i = 0; i < spikes.Count; i++)
+                    {
+                        if (player1.willCollide(spikes[i], RIGHT, playerMoveSpeed)) //if collides with spike, send player to start
+                        {
+                            player1.position = playerStart;
+                            isColliding = true;
+                            break;
+                        }
+                    }
+
                     if(!isColliding)//normal movement
                     {
                         player1.position.X -= 10;
@@ -225,7 +239,18 @@ namespace Game
                             break;
                         }
                     }
-                    if(!isColliding) //normal movement
+
+                    for (int i = 0; i < spikes.Count; i++)
+                    {
+                        if (player1.willCollide(spikes[i], RIGHT, playerMoveSpeed)) //if collides with spike, send player to start
+                        {
+                            player1.position = playerStart;
+                            isColliding = true;
+                            break;
+                        }
+                    }
+
+                    if (!isColliding) //normal movement
                     {
                         player1.position.X += 10;
                         if (player1.onTopOfBlock)
@@ -257,6 +282,7 @@ namespace Game
                         player1.whichBlock = i;
                         break;
                     }
+
                     if (player1.willCollide(blocks[i], DOWN, player1.velocity) && player1.velocity < 0) //if player hits block with upward trajectory
                     {
                         player1.position.Y = blocks[i].position.Y + player1.height;
@@ -264,15 +290,15 @@ namespace Game
                         break;
                     }
                 }
+
                 for (int i = 0; i < spikes.Count; i++) //if player lands on spikes send player back to start
                 {
                     if (player1.willCollide(spikes[i], DOWN, player1.velocity))
                     {
-                        player1.position.X = 100;
-                        player1.position.Y = GraphicsDevice.Viewport.Height - player1TextureLeft.Height;
-                        player1.velocity = 0;
+                        player1.position = playerStart;
                     }
                 }
+
                 if (player1.position.Y + player1.velocity + player1.height > GraphicsDevice.Viewport.Height && !player1.onTopOfBlock) //if player lands on bottom of screen
                 {
                     player1.onTopOfBlock = false;
@@ -304,9 +330,7 @@ namespace Game
                     {
                         if (enemies[i].willCollide(player1, LEFT, enemies[i].speed)) //if enemy touches player send player back to start
                         {
-                            player1.position.X = 100;
-                            player1.position.Y = GraphicsDevice.Viewport.Height - player1TextureLeft.Height;
-                            player1.velocity = 0;
+                            player1.position = playerStart;
                         }
                         enemies[i].position.X -= enemies[i].speed; //moves enemy forward
                     }
@@ -328,8 +352,7 @@ namespace Game
                     {
                         if (enemies[i].willCollide(player1, RIGHT, enemies[i].speed)) //if enemy touches player send player back to start
                         {
-                            player1.position.X = 100;
-                            player1.position.Y = GraphicsDevice.Viewport.Height - player1TextureLeft.Height;
+                            player1.position = playerStart;
                         }
 
                         enemies[i].position.X += enemies[i].speed; //moves enemy forward
@@ -441,10 +464,9 @@ namespace Game
             i+=2; //skips over title and blank line
 
             coordinates = lines[i].Split(' ');
-            player1.position.X = float.Parse(coordinates[0]);
-            player1.position.Y = float.Parse(coordinates[1]);
-            player2.position.X = float.Parse(coordinates[0]);
-            player2.position.Y = float.Parse(coordinates[1]);
+            playerStart = new Vector2(float.Parse(coordinates[0]), float.Parse(coordinates[1]));
+            player1.Initialize(player1TextureLeft, playerStart);
+            player2.Initialize(player2TextureLeft, playerStart);
 
             i+=3; //skips over title and blank line
 

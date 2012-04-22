@@ -124,13 +124,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="mario_gun.png">
-      <Name>mario_gun</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="MenuContent\MenuBackground.png">
       <Name>MenuBackground</Name>
       <Importer>TextureImporter</Importer>

@@ -1,0 +1,17 @@
+#Sample Syntax
+#<Level>
+#	<name>Level 1</name>
+#	<textures>
+#		<block>brick</block>
+		<spikeup>spike</spikeup>
+		
+#		<p1>
+			<left>player_purple_left</left>
+			<right>player_purple_right</right>
+		</p1>
+		<p2>
+			<left>player_yellow_left</left>
+			<right>player_yellow_right</right>
+		</p2>
+			
+#	</textures>

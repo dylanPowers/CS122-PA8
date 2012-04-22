@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Block.cs" />
+    <Compile Include="Menu.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="MovableBlock.cs" />
     <Compile Include="Player.cs" />

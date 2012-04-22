@@ -71,13 +71,22 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
+    <Compile Include="mario_gun.png">
+      <Name>mario_gun</Name>
+=======
     <Compile Include="spike.png">
       <Name>spike</Name>
+>>>>>>> master
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
+    <Compile Include="MenuContent\ExitMenuButton.png">
+      <Name>ExitMenuButton</Name>
+=======
     <Compile Include="enemy_left.png">
       <Name>enemy_left</Name>
       <Importer>TextureImporter</Importer>
@@ -85,24 +94,37 @@
     </Compile>
     <Compile Include="enemy_right.png">
       <Name>enemy_right</Name>
+>>>>>>> master
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
+    <Compile Include="MenuContent\MainMenuButton.png">
+      <Name>MainMenuButton</Name>
+=======
     <Compile Include="brick.png">
       <Name>brick</Name>
+>>>>>>> master
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
+    <Compile Include="MenuContent\RestartMenuButton.png">
+      <Name>RestartMenuButton</Name>
+=======
     <Compile Include="spike_upsidedown.png">
       <Name>spike_upsidedown</Name>
+>>>>>>> master
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
+<<<<<<< HEAD
+=======
   <ItemGroup>
     <Compile Include="door.png">
       <Name>door</Name>
@@ -118,72 +140,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="level2.txt">
-      <Name>level2</Name>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="level99.txt">
-      <Name>level99</Name>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="level1.txt">
       <Name>level1</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="MenuContent\MenuBackground.png">
-      <Name>MenuBackground</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="MenuContent\ExitButton.png">
-      <Name>ExitButton</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="MenuContent\ExitButtonClicked.png">
-      <Name>ExitButtonClicked</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="MenuContent\ExitButtonHover.png">
-      <Name>ExitButtonHover</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="MenuContent\RestartButton.png">
-      <Name>RestartButton</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="MenuContent\RestartButtonClicked.png">
-      <Name>RestartButtonClicked</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="MenuContent\RestartButtonHover.png">
-      <Name>RestartButtonHover</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
+>>>>>>> master
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

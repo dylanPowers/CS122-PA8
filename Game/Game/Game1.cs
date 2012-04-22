@@ -201,7 +201,7 @@ namespace Game
             {
                 if (gameMenu.isRestart())//This function will only return true once before resetting itself.
                 {
-                    this.player1.position = new Vector2(100, GraphicsDevice.Viewport.Height - player1TextureLeft.Height);
+                    player1.position= playerStart;
                 }
 
                 if (player1.position.Y + player1.height < GraphicsDevice.Viewport.Height && !player1.onTopOfBlock) //check if player is in mid air

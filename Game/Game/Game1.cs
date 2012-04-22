@@ -201,7 +201,12 @@ namespace Game
 
                     for (int i = 0; i < spikes.Count; i++)
                     {
-                        if (player1.willCollide(spikes[i], RIGHT, playerMoveSpeed)) //if collides with spike, send player to start
+                        int upOrDown = 0;
+                        if (spikes[i].texture == spikeUpTexture)
+                            upOrDown = 0;
+                        else
+                            upOrDown = 1;
+                        if (player1.willCollideTriangle(spikes[i], LEFT, playerMoveSpeed, upOrDown)) //if collides with spike, send player to start
                         {
                             player1.position = playerStart;
                             isColliding = true;
@@ -252,7 +257,12 @@ namespace Game
 
                     for (int i = 0; i < spikes.Count; i++)
                     {
-                        if (player1.willCollide(spikes[i], RIGHT, playerMoveSpeed)) //if collides with spike, send player to start
+                        int upOrDown = 0;
+                        if (spikes[i].texture == spikeUpTexture)
+                            upOrDown = 0;
+                        else
+                            upOrDown = 1;
+                        if (player1.willCollideTriangle(spikes[i], RIGHT, playerMoveSpeed, upOrDown)) //if collides with spike, send player to start
                         {
                             player1.position = playerStart;
                             isColliding = true;
@@ -310,7 +320,12 @@ namespace Game
 
                 for (int i = 0; i < spikes.Count; i++) //if player lands on spikes send player back to start
                 {
-                    if (player1.willCollide(spikes[i], DOWN, player1.velocity))
+                    int upOrDown = 0;
+                    if (spikes[i].texture == spikeUpTexture)
+                        upOrDown = 0;
+                    else
+                        upOrDown = 1;
+                    if (player1.willCollideTriangle(spikes[i], DOWN, player1.velocity, upOrDown))
                     {
                         player1.position = playerStart;
                     }

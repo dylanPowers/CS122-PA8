@@ -28,12 +28,5 @@ namespace Game
             velocity = 0;
             onTopOfBlock = false;
         }
-            /*String box = "Hello";
-            switch (box)
-            {
-                case "Hello":
-                    box = "too";
-                    break;
-            }*/
     }
 }

@@ -131,22 +131,50 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MenuContent\ExitMenuButton.png">
-      <Name>ExitMenuButton</Name>
+    <Compile Include="MenuContent\MenuBackground.png">
+      <Name>MenuBackground</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MenuContent\MainMenuButton.png">
-      <Name>MainMenuButton</Name>
+    <Compile Include="MenuContent\ExitButton.png">
+      <Name>ExitButton</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MenuContent\RestartMenuButton.png">
-      <Name>RestartMenuButton</Name>
+    <Compile Include="MenuContent\ExitButtonClicked.png">
+      <Name>ExitButtonClicked</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MenuContent\ExitButtonHover.png">
+      <Name>ExitButtonHover</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MenuContent\RestartButton.png">
+      <Name>RestartButton</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MenuContent\RestartButtonClicked.png">
+      <Name>RestartButtonClicked</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MenuContent\RestartButtonHover.png">
+      <Name>RestartButtonHover</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

@@ -58,12 +58,18 @@ namespace Game
 
         Texture2D enemyTextureLeft;
         Texture2D enemyTextureRight;
+
+        Menu gameMenu;
         //End Declaration Code
+
+        
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            gameMenu = new Menu();
         }
 
         /// <summary>
@@ -94,6 +100,9 @@ namespace Game
 
             base.Initialize();
             loadLevel(1);
+
+            gameMenu.Initialize();
+            
         }
 
         /// <summary>
@@ -125,6 +134,10 @@ namespace Game
             enemyTextureRight = Content.Load<Texture2D>("enemy_right");
 
             jumpSound = Content.Load<SoundEffect>("beep");
+
+
+            gameMenu.LoadContent(Content);
+
             //End Loading Code
             
         }
@@ -146,217 +159,247 @@ namespace Game
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
+            //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+            //    this.Exit();
 
             // Resets the character when the escape key is pressed
-            if (currentKeyboardState.IsKeyDown(Keys.Escape))
-                this.player1.position = new Vector2(100, GraphicsDevice.Viewport.Height - player1TextureLeft.Height);
+            //if (currentKeyboardState.IsKeyDown(Keys.Escape))
+            //    
 
             //Begin Update Code
-
-//PLAYER UPDATE CODE
             previousKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
 
-            if (player1.position.Y + player1.height < GraphicsDevice.Viewport.Height && !player1.onTopOfBlock) //check if player is in mid air
+            if (gameMenu.is_active)
             {
-                player1.airbourne = true;
+                this.IsMouseVisible = true;
             }
-            else
+            gameMenu.Update(currentKeyboardState.IsKeyDown(Keys.Escape), previousKeyboardState.IsKeyDown(Keys.Escape));
+            if (!gameMenu.is_active)
             {
-                player1.airbourne = false;
-                player1.velocity = 0;
+                this.IsMouseVisible = false;
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.Up)) //jumping
+            if (gameMenu.isExit())
             {
-                if (!player1.airbourne)
+
+                this.Exit();
+            }
+
+            
+
+
+            
+
+//PLAYER UPDATE CODE
+
+
+            if (!gameMenu.isPause())
+            {
+                if (gameMenu.isRestart())//This function will only return true once before resetting itself.
+                {
+                    this.player1.position = new Vector2(100, GraphicsDevice.Viewport.Height - player1TextureLeft.Height);
+                }
+
+                if (player1.position.Y + player1.height < GraphicsDevice.Viewport.Height && !player1.onTopOfBlock) //check if player is in mid air
                 {
                     player1.airbourne = true;
-                    player1.onTopOfBlock = false;
-                    //beep.Play();
-                    player1.jump();
-                }
-            }
-
-            if (currentKeyboardState.IsKeyDown(Keys.Left)) //moving player left
-            {
-                player1.texture = player1TextureLeft;
-                bool isColliding = false;
-
-                if (player1.position.X - playerMoveSpeed > 0)
-                {
-                    for (int i = 0; i < blocks.Count; i++ )
-                    {
-                        if (player1.willCollide(blocks[i], LEFT, playerMoveSpeed)) //if collides with block, player's position is on edge of block
-                        {
-                            player1.position.X = blocks[i].position.X + blocks[i].width;
-                            isColliding = true;
-                            break;
-                        }
-                    }
-
-                    for (int i = 0; i < spikes.Count; i++)
-                    {
-                        if (player1.willCollide(spikes[i], RIGHT, playerMoveSpeed)) //if collides with spike, send player to start
-                        {
-                            player1.position = playerStart;
-                            isColliding = true;
-                            break;
-                        }
-                    }
-
-                    if(!isColliding)//normal movement
-                    {
-                        player1.position.X -= 10;
-                        if (player1.onTopOfBlock)
-                        {
-                            if (player1.position.X + player1.width <= blocks[player1.whichBlock].position.X)
-                                player1.onTopOfBlock = false;
-                        }
-                    }
-
                 }
                 else
                 {
-                    player1.position.X = 0; //player's position is on left edge of screen
+                    player1.airbourne = false;
+                    player1.velocity = 0;
                 }
-            }
 
-            if (currentKeyboardState.IsKeyDown(Keys.Right)) //moving player right
-            {
-                player1.texture = player1TextureRight;
-                bool isColliding = false;
-
-                if (player1.position.X + player1.width + playerMoveSpeed < GraphicsDevice.Viewport.Width)
+                if (currentKeyboardState.IsKeyDown(Keys.Up)) //jumping
                 {
+                    if (!player1.airbourne)
+                    {
+                        player1.airbourne = true;
+                        player1.onTopOfBlock = false;
+                        //beep.Play();
+                        player1.jump();
+                    }
+                }
+
+                if (currentKeyboardState.IsKeyDown(Keys.Left)) //moving player left
+                {
+                    player1.texture = player1TextureLeft;
+                    bool isColliding = false;
+
+                    if (player1.position.X - playerMoveSpeed > 0)
+                    {
+                        for (int i = 0; i < blocks.Count; i++)
+                        {
+                            if (player1.willCollide(blocks[i], LEFT, playerMoveSpeed)) //if collides with block, player's position is on edge of block
+                            {
+                                player1.position.X = blocks[i].position.X + blocks[i].width;
+                                isColliding = true;
+                                break;
+                            }
+                        }
+
+                        for (int i = 0; i < spikes.Count; i++)
+                        {
+                            if (player1.willCollide(spikes[i], RIGHT, playerMoveSpeed)) //if collides with spike, send player to start
+                            {
+                                player1.position = playerStart;
+                                isColliding = true;
+                                break;
+                            }
+                        }
+
+                        if (!isColliding)//normal movement
+                        {
+                            player1.position.X -= 10;
+                            if (player1.onTopOfBlock)
+                            {
+                                if (player1.position.X + player1.width <= blocks[player1.whichBlock].position.X)
+                                    player1.onTopOfBlock = false;
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        player1.position.X = 0; //player's position is on left edge of screen
+                    }
+                }
+
+                if (currentKeyboardState.IsKeyDown(Keys.Right)) //moving player right
+                {
+                    player1.texture = player1TextureRight;
+                    bool isColliding = false;
+
+                    if (player1.position.X + player1.width + playerMoveSpeed < GraphicsDevice.Viewport.Width)
+                    {
+                        for (int i = 0; i < blocks.Count; i++)
+                        {
+                            if (player1.willCollide(blocks[i], RIGHT, playerMoveSpeed)) //if collides with block, player's position is on edge of block
+                            {
+                                player1.position.X = blocks[i].position.X - player1.width;
+                                isColliding = true;
+                                break;
+                            }
+                        }
+
+                        for (int i = 0; i < spikes.Count; i++)
+                        {
+                            if (player1.willCollide(spikes[i], RIGHT, playerMoveSpeed)) //if collides with spike, send player to start
+                            {
+                                player1.position = playerStart;
+                                isColliding = true;
+                                break;
+                            }
+                        }
+
+                        if (!isColliding) //normal movement
+                        {
+                            player1.position.X += 10;
+                            if (player1.onTopOfBlock)
+                            {
+                                if (player1.position.X >= blocks[0].position.X + blocks[0].width)
+                                    player1.onTopOfBlock = false;
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        player1.position.X = GraphicsDevice.Viewport.Width - player1.width; //player's position is on left edge of screen
+                    }
+
+                }
+
+                if (player1.airbourne)
+                {
+                    player1.onTopOfBlock = false;
+                    player1.velocity += player1.acceleration; //acceleration due to gravity
                     for (int i = 0; i < blocks.Count; i++)
                     {
-                        if (player1.willCollide(blocks[i], RIGHT, playerMoveSpeed)) //if collides with block, player's position is on edge of block
+                        if (player1.willCollide(blocks[i], DOWN, player1.velocity) && player1.velocity > 0) //if player hits block with downward trajectory
                         {
-                            player1.position.X = blocks[i].position.X - player1.width;
-                            isColliding = true;
+                            player1.position.Y = blocks[i].position.Y - player1.height;
+                            player1.velocity = 0;
+                            player1.onTopOfBlock = true;
+                            player1.whichBlock = i;
+                            break;
+                        }
+
+                        if (player1.willCollide(blocks[i], DOWN, player1.velocity) && player1.velocity < 0) //if player hits block with upward trajectory
+                        {
+                            player1.position.Y = blocks[i].position.Y + player1.height;
+                            player1.velocity = 0;
                             break;
                         }
                     }
 
-                    for (int i = 0; i < spikes.Count; i++)
+                    for (int i = 0; i < spikes.Count; i++) //if player lands on spikes send player back to start
                     {
-                        if (player1.willCollide(spikes[i], RIGHT, playerMoveSpeed)) //if collides with spike, send player to start
-                        {
-                            player1.position = playerStart;
-                            isColliding = true;
-                            break;
-                        }
-                    }
-
-                    if (!isColliding) //normal movement
-                    {
-                        player1.position.X += 10;
-                        if (player1.onTopOfBlock)
-                        {
-                            if (player1.position.X >= blocks[0].position.X + blocks[0].width)
-                                player1.onTopOfBlock = false;
-                        }
-                    }
-
-                }
-                else
-                {
-                    player1.position.X = GraphicsDevice.Viewport.Width - player1.width; //player's position is on left edge of screen
-                }
-                
-            }
-
-            if (player1.airbourne)
-            {
-                player1.onTopOfBlock = false;
-                player1.velocity += player1.acceleration; //acceleration due to gravity
-                for (int i = 0; i < blocks.Count; i++ )
-                {
-                    if (player1.willCollide(blocks[i], DOWN, player1.velocity) && player1.velocity > 0) //if player hits block with downward trajectory
-                    {
-                        player1.position.Y = blocks[i].position.Y - player1.height;
-                        player1.velocity = 0;
-                        player1.onTopOfBlock = true;
-                        player1.whichBlock = i;
-                        break;
-                    }
-
-                    if (player1.willCollide(blocks[i], DOWN, player1.velocity) && player1.velocity < 0) //if player hits block with upward trajectory
-                    {
-                        player1.position.Y = blocks[i].position.Y + player1.height;
-                        player1.velocity = 0;
-                        break;
-                    }
-                }
-
-                for (int i = 0; i < spikes.Count; i++) //if player lands on spikes send player back to start
-                {
-                    if (player1.willCollide(spikes[i], DOWN, player1.velocity))
-                    {
-                        player1.position = playerStart;
-                    }
-                }
-
-                if (player1.position.Y + player1.velocity + player1.height > GraphicsDevice.Viewport.Height && !player1.onTopOfBlock) //if player lands on bottom of screen
-                {
-                    player1.onTopOfBlock = false;
-                    player1.position.Y = GraphicsDevice.Viewport.Height - player1.height;
-                }
-                else if (!player1.onTopOfBlock) //basic falling
-                {
-                    player1.position.Y += player1.velocity;
-                }
-            }
-
-//ENEMY UPDATE CODE
-            for(int i = 0; i < enemies.Count; i++)
-            {
-                if (enemies[i].goingLeft)
-                {
-                    bool isColliding = false;
-                    for(int i2 = 0; i2 < blocks.Count; i2++)
-                    {
-                        if (enemies[i].willCollide(blocks[i2], LEFT, enemies[i].speed)) //if enemy collides with a block, turns around
-                        {
-                            enemies[i].position.X = blocks[i2].position.X + blocks[i2].width;
-                            enemies[i].goingLeft = false;
-                            enemies[i].texture = enemyTextureRight;
-                            isColliding = true;
-                        }
-                    }
-                    if(!isColliding)
-                    {
-                        if (enemies[i].willCollide(player1, LEFT, enemies[i].speed)) //if enemy touches player send player back to start
+                        if (player1.willCollide(spikes[i], DOWN, player1.velocity))
                         {
                             player1.position = playerStart;
                         }
-                        enemies[i].position.X -= enemies[i].speed; //moves enemy forward
+                    }
+
+                    if (player1.position.Y + player1.velocity + player1.height > GraphicsDevice.Viewport.Height && !player1.onTopOfBlock) //if player lands on bottom of screen
+                    {
+                        player1.onTopOfBlock = false;
+                        player1.position.Y = GraphicsDevice.Viewport.Height - player1.height;
+                    }
+                    else if (!player1.onTopOfBlock) //basic falling
+                    {
+                        player1.position.Y += player1.velocity;
                     }
                 }
-                else
+
+                //ENEMY UPDATE CODE
+                for (int i = 0; i < enemies.Count; i++)
                 {
-                    bool isColliding = false;
-                    for(int i2 = 0; i2 < blocks.Count; i2++)
+                    if (enemies[i].goingLeft)
                     {
-                        if (enemies[i].willCollide(blocks[i2], RIGHT, enemies[i].speed)) //if enemy collides with a block, turns around
+                        bool isColliding = false;
+                        for (int i2 = 0; i2 < blocks.Count; i2++)
                         {
-                            enemies[i].position.X = blocks[i2].position.X - enemies[i].width;
-                            enemies[i].goingLeft = true;
-                            enemies[i].texture = enemyTextureLeft;
-                            isColliding = true;
+                            if (enemies[i].willCollide(blocks[i2], LEFT, enemies[i].speed)) //if enemy collides with a block, turns around
+                            {
+                                enemies[i].position.X = blocks[i2].position.X + blocks[i2].width;
+                                enemies[i].goingLeft = false;
+                                enemies[i].texture = enemyTextureRight;
+                                isColliding = true;
+                            }
+                        }
+                        if (!isColliding)
+                        {
+                            if (enemies[i].willCollide(player1, LEFT, enemies[i].speed)) //if enemy touches player send player back to start
+                            {
+                                player1.position = playerStart;
+                            }
+                            enemies[i].position.X -= enemies[i].speed; //moves enemy forward
                         }
                     }
-                    if(!isColliding)
+                    else
                     {
-                        if (enemies[i].willCollide(player1, RIGHT, enemies[i].speed)) //if enemy touches player send player back to start
+                        bool isColliding = false;
+                        for (int i2 = 0; i2 < blocks.Count; i2++)
                         {
-                            player1.position = playerStart;
+                            if (enemies[i].willCollide(blocks[i2], RIGHT, enemies[i].speed)) //if enemy collides with a block, turns around
+                            {
+                                enemies[i].position.X = blocks[i2].position.X - enemies[i].width;
+                                enemies[i].goingLeft = true;
+                                enemies[i].texture = enemyTextureLeft;
+                                isColliding = true;
+                            }
                         }
+                        if (!isColliding)
+                        {
+                            if (enemies[i].willCollide(player1, RIGHT, enemies[i].speed)) //if enemy touches player send player back to start
+                            {
+                                player1.position = playerStart;
+                            }
 
-                        enemies[i].position.X += enemies[i].speed; //moves enemy forward
+                            enemies[i].position.X += enemies[i].speed; //moves enemy forward
+                        }
                     }
                 }
             }
@@ -395,6 +438,8 @@ namespace Game
 
             player1.Draw(spriteBatch);
             player2.Draw(spriteBatch);
+
+            gameMenu.draw(ref spriteBatch);
             // End Drawing Code
 
             spriteBatch.End();

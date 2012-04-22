@@ -109,6 +109,8 @@
   <ItemGroup>
     <Compile Include="Block.cs" />
     <Compile Include="Menu.cs" />
+    <Compile Include="Enemy.cs" />
+    <Compile Include="MovableBlock.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />

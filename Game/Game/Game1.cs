@@ -23,8 +23,18 @@ namespace Game
 
         //Begin Declaration Code
         List<Block> blocks;
+        List<Block> spikes;
+        List<Enemy> enemies;
         Player player1;
         Player player2;
+
+        int NUMBLOCKS;
+        int NUMSPIKES;
+        int NUMENEMIES;
+
+        Vector2 playerStart;
+
+        Block door;
 
         int playerMoveSpeed;
 
@@ -33,12 +43,21 @@ namespace Game
         const int LEFT = 3;
         const int RIGHT = 4;
 
-        SoundEffect beep;
+        SoundEffect jumpSound;
+        Song music;
 
         Texture2D player1TextureLeft;
         Texture2D player1TextureRight;
         Texture2D player2TextureLeft;
         Texture2D player2TextureRight;
+
+        Texture2D blockTexture;
+
+        Texture2D spikeUpTexture;
+        Texture2D spikeDownTexture;
+
+        Texture2D enemyTextureLeft;
+        Texture2D enemyTextureRight;
         //End Declaration Code
 
         public Game1()
@@ -60,15 +79,21 @@ namespace Game
             graphics.ApplyChanges();
 
             //Begin Initialization Code
+            music = Content.Load<Song>("music");
+            //MediaPlayer.Play(music);
+
             blocks = new List<Block>();
-            for (int i = 0; i < 14; i++ ) //add needed number of blocks to block list
-                blocks.Add(new Block());
+            spikes = new List<Block>();
+            enemies = new List<Enemy>();
             player1 = new Player();
             player2 = new Player();
-            playerMoveSpeed = 10;
+            playerMoveSpeed = 8;
+
+            door = new Block();
             //End Initialization Code
 
             base.Initialize();
+            loadLevel(1);
         }
 
         /// <summary>
@@ -81,31 +106,25 @@ namespace Game
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             //Begin Loading Code
-            Texture2D textureBlock = Content.Load<Texture2D>("brick");
-            blocks[0].Initialize(textureBlock, new Vector2(0, GraphicsDevice.Viewport.Height - textureBlock.Height));
-            blocks[1].Initialize(textureBlock, new Vector2(150, GraphicsDevice.Viewport.Height - textureBlock.Height));
-            blocks[2].Initialize(textureBlock, new Vector2(150, GraphicsDevice.Viewport.Height - (textureBlock.Height * 2)));
-            blocks[3].Initialize(textureBlock, new Vector2(150, GraphicsDevice.Viewport.Height - (textureBlock.Height * 3)));
-            blocks[4].Initialize(textureBlock, new Vector2(150, GraphicsDevice.Viewport.Height - (textureBlock.Height * 4)));
-            blocks[5].Initialize(textureBlock, new Vector2(150, GraphicsDevice.Viewport.Height - (textureBlock.Height * 5)));
-            blocks[6].Initialize(textureBlock, new Vector2(150, GraphicsDevice.Viewport.Height - (textureBlock.Height * 6)));
-            blocks[7].Initialize(textureBlock, new Vector2(150, GraphicsDevice.Viewport.Height - (textureBlock.Height * 7)));
-            blocks[8].Initialize(textureBlock, new Vector2(150, GraphicsDevice.Viewport.Height - (textureBlock.Height * 8)));
-            blocks[9].Initialize(textureBlock, new Vector2(150, GraphicsDevice.Viewport.Height - (textureBlock.Height * 9)));
-            blocks[10].Initialize(textureBlock, new Vector2(150, GraphicsDevice.Viewport.Height - (textureBlock.Height * 10)));
-            blocks[11].Initialize(textureBlock, new Vector2(100, GraphicsDevice.Viewport.Height - (textureBlock.Height * 4)));
-            blocks[12].Initialize(textureBlock, new Vector2(0, GraphicsDevice.Viewport.Height - (textureBlock.Height * 7)));
-            blocks[13].Initialize(textureBlock, new Vector2(100, GraphicsDevice.Viewport.Height - (textureBlock.Height * 10)));
+            blockTexture = Content.Load<Texture2D>("brick");
+
+            spikeUpTexture = Content.Load<Texture2D>("spike");
+            spikeDownTexture = Content.Load<Texture2D>("spike_upsidedown");
 
             player1TextureLeft = Content.Load<Texture2D>("player_purple_left");
             player1TextureRight = Content.Load<Texture2D>("player_purple_right");
             player2TextureLeft = Content.Load<Texture2D>("player_yellow_left");
             player2TextureRight = Content.Load<Texture2D>("player_yellow_right");
-            Vector2 playerVector = new Vector2(100, GraphicsDevice.Viewport.Height - player1TextureLeft.Height);
-            player1.Initialize(player1TextureLeft, playerVector);
-            //player2.Initialize(playerTexture2, playerVector);
 
-            beep = Content.Load<SoundEffect>("beep");
+            player1.Initialize(player1TextureLeft, new Vector2(0, 0));
+            player2.Initialize(player2TextureLeft, new Vector2(0, 0));
+
+            door.Initialize(Content.Load<Texture2D>("door"), new Vector2(0, 0));
+
+            enemyTextureLeft = Content.Load<Texture2D>("enemy_left");
+            enemyTextureRight = Content.Load<Texture2D>("enemy_right");
+
+            jumpSound = Content.Load<SoundEffect>("beep");
             //End Loading Code
             
         }
@@ -136,6 +155,7 @@ namespace Game
 
             //Begin Update Code
 
+//PLAYER UPDATE CODE
             previousKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
 
@@ -149,18 +169,18 @@ namespace Game
                 player1.velocity = 0;
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.Up))
+            if (currentKeyboardState.IsKeyDown(Keys.Up)) //jumping
             {
                 if (!player1.airbourne)
                 {
                     player1.airbourne = true;
                     player1.onTopOfBlock = false;
-                    beep.Play();
+                    //beep.Play();
                     player1.jump();
                 }
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.Left))
+            if (currentKeyboardState.IsKeyDown(Keys.Left)) //moving player left
             {
                 player1.texture = player1TextureLeft;
                 bool isColliding = false;
@@ -173,8 +193,20 @@ namespace Game
                         {
                             player1.position.X = blocks[i].position.X + blocks[i].width;
                             isColliding = true;
+                            break;
                         }
                     }
+
+                    for (int i = 0; i < spikes.Count; i++)
+                    {
+                        if (player1.willCollide(spikes[i], RIGHT, playerMoveSpeed)) //if collides with spike, send player to start
+                        {
+                            player1.position = playerStart;
+                            isColliding = true;
+                            break;
+                        }
+                    }
+
                     if(!isColliding)//normal movement
                     {
                         player1.position.X -= 10;
@@ -188,11 +220,11 @@ namespace Game
                 }
                 else
                 {
-                    player1.position.X = 0; //player's pos is on left edge of screen
+                    player1.position.X = 0; //player's position is on left edge of screen
                 }
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.Right))
+            if (currentKeyboardState.IsKeyDown(Keys.Right)) //moving player right
             {
                 player1.texture = player1TextureRight;
                 bool isColliding = false;
@@ -205,9 +237,21 @@ namespace Game
                         {
                             player1.position.X = blocks[i].position.X - player1.width;
                             isColliding = true;
+                            break;
                         }
                     }
-                    if(!isColliding) //normal movement
+
+                    for (int i = 0; i < spikes.Count; i++)
+                    {
+                        if (player1.willCollide(spikes[i], RIGHT, playerMoveSpeed)) //if collides with spike, send player to start
+                        {
+                            player1.position = playerStart;
+                            isColliding = true;
+                            break;
+                        }
+                    }
+
+                    if (!isColliding) //normal movement
                     {
                         player1.position.X += 10;
                         if (player1.onTopOfBlock)
@@ -220,7 +264,7 @@ namespace Game
                 }
                 else
                 {
-                    player1.position.X = GraphicsDevice.Viewport.Width - player1.width; //player's pos is on left edge of screen
+                    player1.position.X = GraphicsDevice.Viewport.Width - player1.width; //player's position is on left edge of screen
                 }
                 
             }
@@ -228,10 +272,10 @@ namespace Game
             if (player1.airbourne)
             {
                 player1.onTopOfBlock = false;
-                player1.velocity += player1.acceleration;
+                player1.velocity += player1.acceleration; //acceleration due to gravity
                 for (int i = 0; i < blocks.Count; i++ )
                 {
-                    if (player1.willCollide(blocks[i], DOWN, player1.velocity) && player1.velocity > 0)
+                    if (player1.willCollide(blocks[i], DOWN, player1.velocity) && player1.velocity > 0) //if player hits block with downward trajectory
                     {
                         player1.position.Y = blocks[i].position.Y - player1.height;
                         player1.velocity = 0;
@@ -239,21 +283,81 @@ namespace Game
                         player1.whichBlock = i;
                         break;
                     }
-                    if (player1.willCollide(blocks[i], DOWN, player1.velocity) && player1.velocity < 0)
+
+                    if (player1.willCollide(blocks[i], DOWN, player1.velocity) && player1.velocity < 0) //if player hits block with upward trajectory
                     {
                         player1.position.Y = blocks[i].position.Y + player1.height;
                         player1.velocity = 0;
                         break;
                     }
                 }
-                if (player1.position.Y + player1.velocity + player1.height > GraphicsDevice.Viewport.Height && !player1.onTopOfBlock)
+
+                for (int i = 0; i < spikes.Count; i++) //if player lands on spikes send player back to start
+                {
+                    if (player1.willCollide(spikes[i], DOWN, player1.velocity))
+                    {
+                        player1.position = playerStart;
+                    }
+                }
+
+                if (player1.position.Y + player1.velocity + player1.height > GraphicsDevice.Viewport.Height && !player1.onTopOfBlock) //if player lands on bottom of screen
                 {
                     player1.onTopOfBlock = false;
                     player1.position.Y = GraphicsDevice.Viewport.Height - player1.height;
                 }
-                else if(!player1.onTopOfBlock)
+                else if (!player1.onTopOfBlock) //basic falling
                 {
                     player1.position.Y += player1.velocity;
+                }
+            }
+
+//ENEMY UPDATE CODE
+            for(int i = 0; i < enemies.Count; i++)
+            {
+                if (enemies[i].goingLeft)
+                {
+                    bool isColliding = false;
+                    for(int i2 = 0; i2 < blocks.Count; i2++)
+                    {
+                        if (enemies[i].willCollide(blocks[i2], LEFT, enemies[i].speed)) //if enemy collides with a block, turns around
+                        {
+                            enemies[i].position.X = blocks[i2].position.X + blocks[i2].width;
+                            enemies[i].goingLeft = false;
+                            enemies[i].texture = enemyTextureRight;
+                            isColliding = true;
+                        }
+                    }
+                    if(!isColliding)
+                    {
+                        if (enemies[i].willCollide(player1, LEFT, enemies[i].speed)) //if enemy touches player send player back to start
+                        {
+                            player1.position = playerStart;
+                        }
+                        enemies[i].position.X -= enemies[i].speed; //moves enemy forward
+                    }
+                }
+                else
+                {
+                    bool isColliding = false;
+                    for(int i2 = 0; i2 < blocks.Count; i2++)
+                    {
+                        if (enemies[i].willCollide(blocks[i2], RIGHT, enemies[i].speed)) //if enemy collides with a block, turns around
+                        {
+                            enemies[i].position.X = blocks[i2].position.X - enemies[i].width;
+                            enemies[i].goingLeft = true;
+                            enemies[i].texture = enemyTextureLeft;
+                            isColliding = true;
+                        }
+                    }
+                    if(!isColliding)
+                    {
+                        if (enemies[i].willCollide(player1, RIGHT, enemies[i].speed)) //if enemy touches player send player back to start
+                        {
+                            player1.position = playerStart;
+                        }
+
+                        enemies[i].position.X += enemies[i].speed; //moves enemy forward
+                    }
                 }
             }
             //End Update Code
@@ -276,6 +380,19 @@ namespace Game
             {
                 blocks[i].Draw(spriteBatch);
             }
+
+            for (int i = 0; i < spikes.Count; i++)
+            {
+                spikes[i].Draw(spriteBatch);
+            }
+
+            door.Draw(spriteBatch);
+
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                enemies[i].Draw(spriteBatch);
+            }
+
             player1.Draw(spriteBatch);
             player2.Draw(spriteBatch);
             // End Drawing Code
@@ -285,9 +402,84 @@ namespace Game
             base.Draw(gameTime);
         }
 
-        private void ShootGun(){
+        //private void ShootGun(){
+        //
+        //
+        //}
 
+        private void loadLevel(int level)
+        {
+            blocks.Clear();
+            spikes.Clear();
+            enemies.Clear();
+            NUMBLOCKS = NUMSPIKES = NUMENEMIES = 0;
 
+            string levelName = "Content/level";
+            levelName += level;
+            levelName += ".txt";
+            string[] lines = System.IO.File.ReadAllLines(levelName);
+            int i = 1;
+            string[] coordinates;
+
+            //load blocks
+            while (lines[i] != "")
+            {
+                NUMBLOCKS++;
+                blocks.Add(new Block());
+                coordinates = lines[i].Split(' ');
+                blocks[NUMBLOCKS - 1].Initialize(blockTexture, new Vector2(Convert.ToInt32(coordinates[0]), Convert.ToInt32(coordinates[1])));
+                i++;
+            }
+
+            i+=2; //skips over title and blank line
+
+            //load upspikes
+            while (lines[i] != "")
+            {
+                NUMSPIKES++;
+                spikes.Add(new Block());
+                coordinates = lines[i].Split(' ');
+                spikes[NUMSPIKES - 1].Initialize(spikeUpTexture, new Vector2(Convert.ToInt32(coordinates[0]), Convert.ToInt32(coordinates[1])));
+                i++;
+            }
+
+            i+=2; //skips over title and blank line
+
+            //load downspikes
+            while (lines[i] != "")
+            {
+                NUMSPIKES++;
+                spikes.Add(new Block());
+                coordinates = lines[i].Split(' ');
+                spikes[NUMSPIKES - 1].Initialize(spikeDownTexture, new Vector2(Convert.ToInt32(coordinates[0]), Convert.ToInt32(coordinates[1])));
+                i++;
+            }
+
+            i+=2; //skips over title and blank line
+
+            //load enemies
+            while (lines[i] != "")
+            {
+                NUMENEMIES++;
+                enemies.Add(new Enemy());
+                coordinates = lines[i].Split(' ');
+                enemies[NUMENEMIES - 1].Initialize(enemyTextureLeft, new Vector2(Convert.ToInt32(coordinates[0]), Convert.ToInt32(coordinates[1])));
+                i++;
+            }
+
+            i+=2; //skips over title and blank line
+
+            coordinates = lines[i].Split(' ');
+            playerStart = new Vector2(float.Parse(coordinates[0]), float.Parse(coordinates[1]));
+            player1.Initialize(player1TextureLeft, playerStart);
+            player2.Initialize(player2TextureLeft, playerStart);
+
+            i+=3; //skips over title and blank line
+
+            coordinates = lines[i].Split(' ');
+            door.position.X = float.Parse(coordinates[0]);
+            door.position.Y = float.Parse(coordinates[1]);
         }
     }
 }
+

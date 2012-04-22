@@ -107,6 +107,7 @@ namespace Game
 
             beep = Content.Load<SoundEffect>("beep");
             //End Loading Code
+            
         }
 
         /// <summary>

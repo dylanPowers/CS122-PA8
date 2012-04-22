@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -31,6 +32,8 @@ namespace Game
         int NUMBLOCKS;
         int NUMSPIKES;
         int NUMENEMIES;
+
+        int CURRENTLEVEL = 1;
 
         Vector2 playerStart;
 
@@ -206,6 +209,13 @@ namespace Game
                         }
                     }
 
+                    if (player1.willCollide(door, LEFT, playerMoveSpeed))
+                    {
+                        CURRENTLEVEL++;
+                        loadLevel(CURRENTLEVEL);
+                        return;
+                    }
+
                     if(!isColliding)//normal movement
                     {
                         player1.position.X -= 10;
@@ -248,6 +258,13 @@ namespace Game
                             isColliding = true;
                             break;
                         }
+                    }
+
+                    if (player1.willCollide(door, RIGHT, playerMoveSpeed))
+                    {
+                        CURRENTLEVEL++;
+                        loadLevel(CURRENTLEVEL);
+                        return;
                     }
 
                     if (!isColliding) //normal movement
@@ -411,68 +428,79 @@ namespace Game
             string levelName = "Content/level";
             levelName += level;
             levelName += ".txt";
-            string[] lines = System.IO.File.ReadAllLines(levelName);
-            int i = 1;
-            string[] coordinates;
+            string[] lines;
 
-            //load blocks
-            while (lines[i] != "")
+            try
             {
-                NUMBLOCKS++;
-                blocks.Add(new Block());
+                lines = System.IO.File.ReadAllLines(levelName);
+                int i = 1;
+                string[] coordinates;
+
+                //load blocks
+                while (lines[i] != "")
+                {
+                    NUMBLOCKS++;
+                    blocks.Add(new Block());
+                    coordinates = lines[i].Split(' ');
+                    blocks[NUMBLOCKS - 1].Initialize(blockTexture, new Vector2(Convert.ToInt32(coordinates[0]), Convert.ToInt32(coordinates[1])));
+                    i++;
+                }
+
+                i += 2; //skips over title and blank line
+
+                //load upspikes
+                while (lines[i] != "")
+                {
+                    NUMSPIKES++;
+                    spikes.Add(new Block());
+                    coordinates = lines[i].Split(' ');
+                    spikes[NUMSPIKES - 1].Initialize(spikeUpTexture, new Vector2(Convert.ToInt32(coordinates[0]), Convert.ToInt32(coordinates[1])));
+                    i++;
+                }
+
+                i += 2; //skips over title and blank line
+
+                //load downspikes
+                while (lines[i] != "")
+                {
+                    NUMSPIKES++;
+                    spikes.Add(new Block());
+                    coordinates = lines[i].Split(' ');
+                    spikes[NUMSPIKES - 1].Initialize(spikeDownTexture, new Vector2(Convert.ToInt32(coordinates[0]), Convert.ToInt32(coordinates[1])));
+                    i++;
+                }
+
+                i += 2; //skips over title and blank line
+
+                //load enemies
+                while (lines[i] != "")
+                {
+                    NUMENEMIES++;
+                    enemies.Add(new Enemy());
+                    coordinates = lines[i].Split(' ');
+                    enemies[NUMENEMIES - 1].Initialize(enemyTextureLeft, new Vector2(Convert.ToInt32(coordinates[0]), Convert.ToInt32(coordinates[1])));
+                    i++;
+                }
+
+                i += 2; //skips over title and blank line
+
                 coordinates = lines[i].Split(' ');
-                blocks[NUMBLOCKS - 1].Initialize(blockTexture, new Vector2(Convert.ToInt32(coordinates[0]), Convert.ToInt32(coordinates[1])));
-                i++;
+                playerStart = new Vector2(float.Parse(coordinates[0]), float.Parse(coordinates[1]));
+                player1.Initialize(player1TextureLeft, playerStart);
+                player2.Initialize(player2TextureLeft, playerStart);
+
+                i += 3; //skips over title and blank line
+
+                coordinates = lines[i].Split(' ');
+                door.position.X = float.Parse(coordinates[0]);
+                door.position.Y = float.Parse(coordinates[1]);
             }
 
-            i+=2; //skips over title and blank line
-
-            //load upspikes
-            while (lines[i] != "")
+            catch (FileNotFoundException e)
             {
-                NUMSPIKES++;
-                spikes.Add(new Block());
-                coordinates = lines[i].Split(' ');
-                spikes[NUMSPIKES - 1].Initialize(spikeUpTexture, new Vector2(Convert.ToInt32(coordinates[0]), Convert.ToInt32(coordinates[1])));
-                i++;
+                loadLevel(99);
+                //Code of the end of the game... You Win! or something...
             }
-
-            i+=2; //skips over title and blank line
-
-            //load downspikes
-            while (lines[i] != "")
-            {
-                NUMSPIKES++;
-                spikes.Add(new Block());
-                coordinates = lines[i].Split(' ');
-                spikes[NUMSPIKES - 1].Initialize(spikeDownTexture, new Vector2(Convert.ToInt32(coordinates[0]), Convert.ToInt32(coordinates[1])));
-                i++;
-            }
-
-            i+=2; //skips over title and blank line
-
-            //load enemies
-            while (lines[i] != "")
-            {
-                NUMENEMIES++;
-                enemies.Add(new Enemy());
-                coordinates = lines[i].Split(' ');
-                enemies[NUMENEMIES - 1].Initialize(enemyTextureLeft, new Vector2(Convert.ToInt32(coordinates[0]), Convert.ToInt32(coordinates[1])));
-                i++;
-            }
-
-            i+=2; //skips over title and blank line
-
-            coordinates = lines[i].Split(' ');
-            playerStart = new Vector2(float.Parse(coordinates[0]), float.Parse(coordinates[1]));
-            player1.Initialize(player1TextureLeft, playerStart);
-            player2.Initialize(player2TextureLeft, playerStart);
-
-            i+=3; //skips over title and blank line
-
-            coordinates = lines[i].Split(' ');
-            door.position.X = float.Parse(coordinates[0]);
-            door.position.Y = float.Parse(coordinates[1]);
         }
     }
 }

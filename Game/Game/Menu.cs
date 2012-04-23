@@ -24,9 +24,13 @@ namespace Game
         private Texture2D exit_but_hover;
         private Texture2D exit_but_current;
         private Texture2D bg;
+        private Texture2D x_but;
+        private Texture2D x_but_clicked;
+        private Texture2D x_but_current;
         private Vector2 restart_but_pos;
         private Vector2 exit_but_pos;
         private Vector2 bg_pos;
+        private Vector2 x_but_pos;
         private MouseState prev_mouse;
 
         public void Initialize()
@@ -38,6 +42,8 @@ namespace Game
             restart_but_pos.Y = 266;
             exit_but_pos.X = 650;
             exit_but_pos.Y = 266;
+            x_but_pos.X = 800;
+            x_but_pos.Y = 125;
             bg_pos.X = 313;
             bg_pos.Y = 88;
         }
@@ -50,11 +56,14 @@ namespace Game
             exit_but = Content.Load<Texture2D>("MenuContent/ExitButton");
             exit_but_clicked = Content.Load<Texture2D>("MenuContent/ExitButtonClicked");
             exit_but_hover = Content.Load<Texture2D>("MenuContent/ExitButtonHover");
+            x_but = Content.Load<Texture2D>("MenuContent/xButton");
+            x_but_clicked = Content.Load<Texture2D>("MenuContent/xButtonClicked");
 
             bg = Content.Load<Texture2D>("MenuContent/MenuBackground");
 
             restart_but_current = restart_but;
             exit_but_current = exit_but;
+            x_but_current = x_but;
 
         }
 
@@ -65,6 +74,7 @@ namespace Game
                 sprites.Draw(bg, bg_pos, Color.White);
                 sprites.Draw(restart_but_current, restart_but_pos, Color.White);
                 sprites.Draw(exit_but_current, exit_but_pos, Color.White);
+                sprites.Draw(x_but_current, x_but_pos, Color.White);
             }
         }
 
@@ -131,7 +141,12 @@ namespace Game
                         exit_but_current = exit_but_hover;
                     }
                 }
+                
+                else if ()
+                {
+                      
 
+                }
                 else
                 {
                     exit_but_current = exit_but;

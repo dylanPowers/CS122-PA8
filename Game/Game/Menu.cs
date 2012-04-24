@@ -141,16 +141,31 @@ namespace Game
                         exit_but_current = exit_but_hover;
                     }
                 }
-                
-                else if ()
+
+                else if ((mouse.X <= x_but_pos.X + 43 && x_but_pos.X + 7 <= mouse.X)
+                                                    &&
+                         (mouse.Y <= x_but_pos.Y + 43 && x_but_pos.Y + 7 <= mouse.Y))
                 {
-                      
+                    if (mouse.LeftButton == ButtonState.Pressed)
+                    {
+                        x_but_current = x_but_clicked;
+
+                    }
+                    else if (mouse.LeftButton == ButtonState.Released && prev_mouse.LeftButton == ButtonState.Pressed)
+                    {
+                        is_active = false;
+                    }
+                    else
+                    {
+                        x_but_current = x_but_clicked;
+                    }
 
                 }
                 else
                 {
                     exit_but_current = exit_but;
                     restart_but_current = restart_but;
+                    x_but_current = x_but;
                 }
 
                 prev_mouse = mouse;

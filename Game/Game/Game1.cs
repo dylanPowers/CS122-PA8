@@ -214,6 +214,16 @@ namespace Game
                     player1.velocity = 0;
                 }
 
+                if (player2.position.Y + player2.height < GraphicsDevice.Viewport.Height && !player2.onTopOfBlock) //check if player is in mid air
+                {
+                    player2.airbourne = true;
+                }
+                else
+                {
+                    player2.airbourne = false;
+                    player2.velocity = 0;
+                }
+
                 if (currentKeyboardState.IsKeyDown(Keys.Up)) //jumping
                 {
                     if (!player1.airbourne)
@@ -222,6 +232,17 @@ namespace Game
                         player1.onTopOfBlock = false;
                         //beep.Play();
                         player1.jump();
+                    }
+                }
+
+                if (currentKeyboardState.IsKeyDown(Keys.W)) //jumping
+                {
+                    if (!player2.airbourne)
+                    {
+                        player2.airbourne = true;
+                        player2.onTopOfBlock = false;
+                        //beep.Play();
+                        player2.jump();
                     }
                 }
 
@@ -278,6 +299,62 @@ namespace Game
                     else
                     {
                         player1.position.X = 0; //player's position is on left edge of screen
+                    }
+                }
+
+                if (currentKeyboardState.IsKeyDown(Keys.A)) //moving player left
+                {
+                    player2.texture = player2TextureLeft;
+                    bool isColliding = false;
+
+                    if (player2.position.X - playerMoveSpeed > 0)
+                    {
+                        for (int i = 0; i < blocks.Count; i++)
+                        {
+                            if (player2.willCollide(blocks[i], LEFT, playerMoveSpeed)) //if collides with block, player's position is on edge of block
+                            {
+                                player2.position.X = blocks[i].position.X + blocks[i].width;
+                                isColliding = true;
+                                break;
+                            }
+                        }
+
+                        for (int i = 0; i < spikes.Count; i++)
+                        {
+                            int upOrDown = 0;
+                            if (spikes[i].texture == spikeUpTexture)
+                                upOrDown = 0;
+                            else
+                                upOrDown = 1;
+                            if (player2.willCollideTriangle(spikes[i], LEFT, playerMoveSpeed, upOrDown)) //if collides with spike, send player to start
+                            {
+                                player2.position = playerStart;
+                                isColliding = true;
+                                break;
+                            }
+                        }
+
+                        if (player2.willCollide(door, LEFT, playerMoveSpeed))
+                        {
+                            CURRENTLEVEL++;
+                            loadLevel(CURRENTLEVEL);
+                            return;
+                        }
+
+                        if (!isColliding)//normal movement
+                        {
+                            player2.position.X -= 10;
+                            if (player2.onTopOfBlock)
+                            {
+                                if (player2.position.X + player2.width <= blocks[player2.whichBlock].position.X)
+                                    player2.onTopOfBlock = false;
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        player2.position.X = 0; //player's position is on left edge of screen
                     }
                 }
 
@@ -338,6 +415,63 @@ namespace Game
 
                 }
 
+                if (currentKeyboardState.IsKeyDown(Keys.D)) //moving player right
+                {
+                    player2.texture = player2TextureRight;
+                    bool isColliding = false;
+
+                    if (player2.position.X + player2.width + playerMoveSpeed < GraphicsDevice.Viewport.Width)
+                    {
+                        for (int i = 0; i < blocks.Count; i++)
+                        {
+                            if (player2.willCollide(blocks[i], RIGHT, playerMoveSpeed)) //if collides with block, player's position is on edge of block
+                            {
+                                player2.position.X = blocks[i].position.X - player2.width;
+                                isColliding = true;
+                                break;
+                            }
+                        }
+
+                        for (int i = 0; i < spikes.Count; i++)
+                        {
+                            int upOrDown = 0;
+                            if (spikes[i].texture == spikeUpTexture)
+                                upOrDown = 0;
+                            else
+                                upOrDown = 1;
+                            if (player2.willCollideTriangle(spikes[i], RIGHT, playerMoveSpeed, upOrDown)) //if collides with spike, send player to start
+                            {
+                                player2.position = playerStart;
+                                isColliding = true;
+                                break;
+                            }
+                        }
+
+                        if (player2.willCollide(door, RIGHT, playerMoveSpeed))
+                        {
+                            CURRENTLEVEL++;
+                            loadLevel(CURRENTLEVEL);
+                            return;
+                        }
+
+                        if (!isColliding) //normal movement
+                        {
+                            player2.position.X += 10;
+                            if (player2.onTopOfBlock)
+                            {
+                                if (player2.position.X >= blocks[0].position.X + blocks[0].width)
+                                    player2.onTopOfBlock = false;
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        player2.position.X = GraphicsDevice.Viewport.Width - player2.width; //player's position is on left edge of screen
+                    }
+
+                }
+
                 if (player1.airbourne)
                 {
                     player1.onTopOfBlock = false;
@@ -385,6 +519,53 @@ namespace Game
                     }
                 }
 
+                if (player2.airbourne)
+                {
+                    player2.onTopOfBlock = false;
+                    player2.velocity += player2.acceleration; //acceleration due to gravity
+                    for (int i = 0; i < blocks.Count; i++)
+                    {
+                        if (player2.willCollide(blocks[i], DOWN, player2.velocity) && player2.velocity > 0) //if player hits block with downward trajectory
+                        {
+                            player2.position.Y = blocks[i].position.Y - player2.height;
+                            player2.velocity = 0;
+                            player2.onTopOfBlock = true;
+                            player2.whichBlock = i;
+                            break;
+                        }
+
+                        if (player2.willCollide(blocks[i], DOWN, player2.velocity) && player2.velocity < 0) //if player hits block with upward trajectory
+                        {
+                            player2.position.Y = blocks[i].position.Y + player2.height;
+                            player2.velocity = 0;
+                            break;
+                        }
+                    }
+
+                    for (int i = 0; i < spikes.Count; i++) //if player lands on spikes send player back to start
+                    {
+                        int upOrDown = 0;
+                        if (spikes[i].texture == spikeUpTexture)
+                            upOrDown = 0;
+                        else
+                            upOrDown = 1;
+                        if (player2.willCollideTriangle(spikes[i], DOWN, player2.velocity, upOrDown))
+                        {
+                            player2.position = playerStart;
+                        }
+                    }
+
+                    if (player2.position.Y + player2.velocity + player2.height > GraphicsDevice.Viewport.Height && !player2.onTopOfBlock) //if player lands on bottom of screen
+                    {
+                        player2.onTopOfBlock = false;
+                        player2.position.Y = GraphicsDevice.Viewport.Height - player2.height;
+                    }
+                    else if (!player2.onTopOfBlock) //basic falling
+                    {
+                        player2.position.Y += player2.velocity;
+                    }
+                }
+
                 //ENEMY UPDATE CODE
                 for (int i = 0; i < enemies.Count; i++)
                 {
@@ -407,6 +588,10 @@ namespace Game
                             {
                                 player1.position = playerStart;
                             }
+                            if (enemies[i].willCollide(player2, LEFT, enemies[i].speed)) //if enemy touches player send player back to start
+                            {
+                                player2.position = playerStart;
+                            }
                             enemies[i].position.X -= enemies[i].speed; //moves enemy forward
                         }
                     }
@@ -428,6 +613,10 @@ namespace Game
                             if (enemies[i].willCollide(player1, RIGHT, enemies[i].speed)) //if enemy touches player send player back to start
                             {
                                 player1.position = playerStart;
+                            }
+                            if (enemies[i].willCollide(player2, RIGHT, enemies[i].speed)) //if enemy touches player send player back to start
+                            {
+                                player2.position = playerStart;
                             }
 
                             enemies[i].position.X += enemies[i].speed; //moves enemy forward

@@ -173,7 +173,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
     <None Include="level2.txt">
       <Name>level2</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -188,20 +187,53 @@
       <Name>level3</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-=======
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="MenuContent\xButton.png">
       <Name>xButton</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="MenuContent\xButtonClicked.png">
       <Name>xButtonClicked</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
->>>>>>> d563eaa3e15ca7bad0c396b31a933bf7a54d6cc0
+  </ItemGroup>
+  <ItemGroup>
+<<<<<<< HEAD
+    <Compile Include="MenuContent\DirectionsScreen.png">
+      <Name>DirectionsScreen</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MenuContent\HelpButton.png">
+      <Name>HelpButton</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MenuContent\HelpButtonClicked.png">
+      <Name>HelpButtonClicked</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MenuContent\HelpButtonHover.png">
+      <Name>HelpButtonHover</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+=======
+    <None Include="level4.txt">
+      <Name>level4</Name>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+>>>>>>> master
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 

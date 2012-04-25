@@ -34,6 +34,8 @@ namespace Game
         //Background
         private Texture2D bg;
         private Vector2 bg_pos;
+        private Vector2 bg_start_pos;
+        private float bg_scale;
 
         //X Button
         private Texture2D x_but;
@@ -73,11 +75,15 @@ namespace Game
             help_but_pos.X = 525;
             help_but_pos.Y = 346;
 
-            bg_pos.X = 313;
-            bg_pos.Y = 88;
+            //bg_pos.X = 313;
+            //bg_pos.Y = 88;
+            bg_start_pos.X = 597;
+            bg_start_pos.Y = 298;
+            bg_pos = bg_start_pos;
+            bg_scale = 0.01F;
 
             directions_pos.X = 0;
-            directions_pos.Y = 0;
+            directions_pos.Y = -600;
         }
 
         public void LoadContent(ContentManager Content)
@@ -113,11 +119,16 @@ namespace Game
                 {
                     sprites.Draw(directions_bg, directions_pos, Color.White);
                 }
-                sprites.Draw(bg, bg_pos, Color.White);
-                sprites.Draw(restart_but_current, restart_but_pos, Color.White);
-                sprites.Draw(exit_but_current, exit_but_pos, Color.White);
-                sprites.Draw(x_but_current, x_but_pos, Color.White);
-                sprites.Draw(help_but_current, help_but_pos, Color.White);
+
+                sprites.Draw(bg, bg_pos, null, Color.White, 0, new Vector2(0,0), bg_scale, 0, 0);
+
+                if (bg_scale >= 1)
+                {
+                    sprites.Draw(restart_but_current, restart_but_pos, Color.White);
+                    sprites.Draw(exit_but_current, exit_but_pos, Color.White);
+                    sprites.Draw(x_but_current, x_but_pos, Color.White);
+                    sprites.Draw(help_but_current, help_but_pos, Color.White);
+                }
             }
         }
 
@@ -132,7 +143,7 @@ namespace Game
             {
                 if (is_active)
                 {
-                    is_active = false;
+                    exit();
                 }
                 else
                 {
@@ -236,15 +247,29 @@ namespace Game
                 }
 
                 prev_mouse = mouse;
-            }
 
+                if (is_directions_viewable && directions_pos.Y != 0)
+                {
+                    directions_pos.Y += 25;
+                }
+
+                if (bg_scale < 1)
+                {
+                    bg_scale += 0.05F;
+                    bg_pos.X -= (bg.Width / 2) * 0.05F;
+                    bg_pos.Y -= (bg.Height / 2) * 0.05F;
+                }
+
+            }            
         }
 
         private void exit()
         {
             is_active = false;
             is_directions_viewable = false;
-
+            directions_pos.Y = -600;
+            bg_scale = .01F;
+            bg_pos = bg_start_pos; 
         }
         public bool isPause()
         {

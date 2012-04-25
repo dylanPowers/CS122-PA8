@@ -118,12 +118,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="level2.txt">
-      <Name>level2</Name>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="level99.txt">
       <Name>level99</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

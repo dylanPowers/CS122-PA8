@@ -71,6 +71,7 @@ namespace Game
         {
             if (is_active)
             {
+                
                 sprites.Draw(bg, bg_pos, Color.White);
                 sprites.Draw(restart_but_current, restart_but_pos, Color.White);
                 sprites.Draw(exit_but_current, exit_but_pos, Color.White);

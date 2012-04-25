@@ -89,7 +89,7 @@ namespace Game
 
             //Begin Initialization Code
             music = Content.Load<Song>("music");
-            //MediaPlayer.Play(music);
+            MediaPlayer.Play(music);
 
             blocks = new List<Block>();
             spikes = new List<Block>();
@@ -231,7 +231,7 @@ namespace Game
                     {
                         player1.airbourne = true;
                         player1.onTopOfBlock = false;
-                        //jumpSound.Play();
+                        jumpSound.Play();
                         player1.jump();
                     }
                 }
@@ -242,7 +242,7 @@ namespace Game
                     {
                         player2.airbourne = true;
                         player2.onTopOfBlock = false;
-                        //jumpSound.Play();
+                        jumpSound.Play();
                         player2.jump();
                     }
                 }

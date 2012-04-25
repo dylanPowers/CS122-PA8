@@ -201,7 +201,8 @@ namespace Game
             {
                 if (gameMenu.isRestart())//This function will only return true once before resetting itself.
                 {
-                    player1.position= playerStart;
+                    player1.position = playerStart;
+                    player2.position = playerStart;
                 }
 
                 if (player1.position.Y + player1.height < GraphicsDevice.Viewport.Height && !player1.onTopOfBlock) //check if player is in mid air
@@ -402,7 +403,7 @@ namespace Game
                             player1.position.X += 10;
                             if (player1.onTopOfBlock)
                             {
-                                if (player1.position.X >= blocks[0].position.X + blocks[0].width)
+                                if (player1.position.X >= blocks[player1.whichBlock].position.X + blocks[player1.whichBlock].width)
                                     player1.onTopOfBlock = false;
                             }
                         }
@@ -459,7 +460,7 @@ namespace Game
                             player2.position.X += 10;
                             if (player2.onTopOfBlock)
                             {
-                                if (player2.position.X >= blocks[0].position.X + blocks[0].width)
+                                if (player2.position.X >= blocks[player2.whichBlock].position.X + blocks[player2.whichBlock].width)
                                     player2.onTopOfBlock = false;
                             }
                         }
@@ -505,7 +506,15 @@ namespace Game
                         if (player1.willCollideTriangle(spikes[i], DOWN, player1.velocity, upOrDown))
                         {
                             player1.position = playerStart;
+                            player1.velocity = 0;
                         }
+                    }
+
+                    if (player1.willCollide(door, DOWN, player1.velocity))
+                    {
+                        player1.velocity = 0;
+                        CURRENTLEVEL++;
+                        loadLevel(CURRENTLEVEL);
                     }
 
                     if (player1.position.Y + player1.velocity + player1.height > GraphicsDevice.Viewport.Height && !player1.onTopOfBlock) //if player lands on bottom of screen
@@ -552,7 +561,15 @@ namespace Game
                         if (player2.willCollideTriangle(spikes[i], DOWN, player2.velocity, upOrDown))
                         {
                             player2.position = playerStart;
+                            player2.velocity = 0;
                         }
+                    }
+
+                    if (player2.willCollide(door, DOWN, player2.velocity))
+                    {
+                        player2.velocity = 0;
+                        CURRENTLEVEL++;
+                        loadLevel(CURRENTLEVEL);
                     }
 
                     if (player2.position.Y + player2.velocity + player2.height > GraphicsDevice.Viewport.Height && !player2.onTopOfBlock) //if player lands on bottom of screen

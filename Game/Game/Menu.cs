@@ -15,6 +15,7 @@ namespace Game
         public bool is_active;
         private bool exit_flag;
         private bool restart_flag;
+
         private Texture2D restart_but;
         private Texture2D restart_but_clicked;
         private Texture2D restart_but_hover;
@@ -64,6 +65,7 @@ namespace Game
             restart_but_current = restart_but;
             exit_but_current = exit_but;
             x_but_current = x_but;
+           
 
         }
 

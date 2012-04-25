@@ -266,12 +266,7 @@ namespace Game
 
                         for (int i = 0; i < spikes.Count; i++)
                         {
-                            int upOrDown = 0;
-                            if (spikes[i].texture == spikeUpTexture)
-                                upOrDown = 0;
-                            else
-                                upOrDown = 1;
-                            if (player1.willCollideTriangle(spikes[i], LEFT, playerMoveSpeed, upOrDown)) //if collides with spike, send player to start
+                            if (player1.willCollide(spikes[i], LEFT, playerMoveSpeed)) //if collides with spike, send player to start
                             {
                                 player1.position = playerStart;
                                 isColliding = true;
@@ -322,12 +317,7 @@ namespace Game
 
                         for (int i = 0; i < spikes.Count; i++)
                         {
-                            int upOrDown = 0;
-                            if (spikes[i].texture == spikeUpTexture)
-                                upOrDown = 0;
-                            else
-                                upOrDown = 1;
-                            if (player2.willCollideTriangle(spikes[i], LEFT, playerMoveSpeed, upOrDown)) //if collides with spike, send player to start
+                            if (player2.willCollide(spikes[i], LEFT, playerMoveSpeed)) //if collides with spike, send player to start
                             {
                                 player2.position = playerStart;
                                 isColliding = true;
@@ -378,12 +368,7 @@ namespace Game
 
                         for (int i = 0; i < spikes.Count; i++)
                         {
-                            int upOrDown = 0;
-                            if (spikes[i].texture == spikeUpTexture)
-                                upOrDown = 0;
-                            else
-                                upOrDown = 1;
-                            if (player1.willCollideTriangle(spikes[i], RIGHT, playerMoveSpeed, upOrDown)) //if collides with spike, send player to start
+                            if (player1.willCollide(spikes[i], RIGHT, playerMoveSpeed)) //if collides with spike, send player to start
                             {
                                 player1.position = playerStart;
                                 isColliding = true;
@@ -435,12 +420,7 @@ namespace Game
 
                         for (int i = 0; i < spikes.Count; i++)
                         {
-                            int upOrDown = 0;
-                            if (spikes[i].texture == spikeUpTexture)
-                                upOrDown = 0;
-                            else
-                                upOrDown = 1;
-                            if (player2.willCollideTriangle(spikes[i], RIGHT, playerMoveSpeed, upOrDown)) //if collides with spike, send player to start
+                            if (player2.willCollide(spikes[i], RIGHT, playerMoveSpeed)) //if collides with spike, send player to start
                             {
                                 player2.position = playerStart;
                                 isColliding = true;
@@ -498,12 +478,7 @@ namespace Game
 
                     for (int i = 0; i < spikes.Count; i++) //if player lands on spikes send player back to start
                     {
-                        int upOrDown = 0;
-                        if (spikes[i].texture == spikeUpTexture)
-                            upOrDown = 0;
-                        else
-                            upOrDown = 1;
-                        if (player1.willCollideTriangle(spikes[i], DOWN, player1.velocity, upOrDown))
+                        if (player1.willCollide(spikes[i], DOWN, player1.velocity))
                         {
                             player1.position = playerStart;
                             player1.velocity = 0;
@@ -553,12 +528,7 @@ namespace Game
 
                     for (int i = 0; i < spikes.Count; i++) //if player lands on spikes send player back to start
                     {
-                        int upOrDown = 0;
-                        if (spikes[i].texture == spikeUpTexture)
-                            upOrDown = 0;
-                        else
-                            upOrDown = 1;
-                        if (player2.willCollideTriangle(spikes[i], DOWN, player2.velocity, upOrDown))
+                        if (player2.willCollide(spikes[i], DOWN, player2.velocity))
                         {
                             player2.position = playerStart;
                             player2.velocity = 0;

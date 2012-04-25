@@ -765,7 +765,12 @@ namespace Game
 
             catch (FileNotFoundException e)
             {
-                loadLevel(99);
+                if (CURRENTLEVEL != 0)
+                    loadLevel(99);
+                else
+                    Exit();
+
+                CURRENTLEVEL = -1;
                 //Code of the end of the game... You Win! or something...
             }
         }

@@ -118,12 +118,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="level2.txt">
-      <Name>level2</Name>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="level99.txt">
       <Name>level99</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -200,8 +194,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="MenuContent\xButtonClicked.png">
       <Name>xButtonClicked</Name>
       <Importer>TextureImporter</Importer>

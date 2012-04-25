@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Mario's Ripoff Adventure")]
 [assembly: AssemblyProduct("Mario's Ripoff Adventure")]
 [assembly: AssemblyDescription("Play This!")]
-[assembly: AssemblyCompany("The CS122 A-Team")]
+[assembly: AssemblyCompany("The WSU CS122 A-Team")]
 [assembly: AssemblyCopyright("Copyright ©  2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

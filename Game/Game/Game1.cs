@@ -231,7 +231,7 @@ namespace Game
                     {
                         player1.airbourne = true;
                         player1.onTopOfBlock = false;
-                        //beep.Play();
+                        //jumpSound.Play();
                         player1.jump();
                     }
                 }
@@ -242,7 +242,7 @@ namespace Game
                     {
                         player2.airbourne = true;
                         player2.onTopOfBlock = false;
-                        //beep.Play();
+                        //jumpSound.Play();
                         player2.jump();
                     }
                 }

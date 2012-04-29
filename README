@@ -1,1 +1,14 @@
-This is where we get to collaborate our code.
+Mario's Ripoff Adventure -- AKA Programming Assignment 8
+Project Source: https://github.com/WSU-CS122-TeamA/CS122-PA8
+Installation Files: https://github.com/downloads/WSU-CS122-TeamA/CS122-PA8/AdventureGame.zip
+Authors:
+	Dylan Powers
+	Evan Schimpf
+	Kadir Perez
+	Ryan Hunt
+Framework: Microsoft XNA Game Studio 4.0
+Language: C#
+Instructions:
+	To compile and run this game it's required to have XNA Game Studio 4.0 in 
+Visual Studio 2010. To simply run the game then it's recommended to download 
+the installation files at the above link and play the game that way.

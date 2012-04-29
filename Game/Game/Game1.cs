@@ -102,7 +102,7 @@ namespace Game
             //End Initialization Code
 
             base.Initialize();
-            loadLevel(1);
+            loadLevel(CURRENTLEVEL);
 
             gameMenu.Initialize();
             
@@ -199,10 +199,12 @@ namespace Game
 
             if (!gameMenu.isPause())
             {
-                if (gameMenu.isRestart())//This function will only return true once before resetting itself.
+
+                //This now does a full restart.
+                if (gameMenu.isRestart())
                 {
-                    player1.position = playerStart;
-                    player2.position = playerStart;
+                    CURRENTLEVEL = 1;
+                    loadLevel(CURRENTLEVEL);
                 }
 
                 if (player1.position.Y + player1.height < GraphicsDevice.Viewport.Height && !player1.onTopOfBlock) //check if player is in mid air

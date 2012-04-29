@@ -288,7 +288,7 @@ namespace Game
                             player1.position.X -= 10;
                             if (player1.onTopOfBlock)
                             {
-                                if (player1.position.X + player1.width <= blocks[player1.whichBlock].position.X)
+                                if (player1.position.X + player1.width <= blocks[player1.whichBlock].position.X || player1.position.X >= blocks[player1.whichBlock].position.X + blockTexture.Width)
                                     player1.onTopOfBlock = false;
                             }
                         }
@@ -339,7 +339,7 @@ namespace Game
                             player2.position.X -= 10;
                             if (player2.onTopOfBlock)
                             {
-                                if (player2.position.X + player2.width <= blocks[player2.whichBlock].position.X)
+                                if (player2.position.X + player2.width <= blocks[player2.whichBlock].position.X || player2.position.X >= blocks[player2.whichBlock].position.X + blockTexture.Width)
                                     player2.onTopOfBlock = false;
                             }
                         }
@@ -390,7 +390,7 @@ namespace Game
                             player1.position.X += 10;
                             if (player1.onTopOfBlock)
                             {
-                                if (player1.position.X >= blocks[player1.whichBlock].position.X + blocks[player1.whichBlock].width)
+                                if (player1.position.X + player1.width <= blocks[player1.whichBlock].position.X || player1.position.X >= blocks[player1.whichBlock].position.X + blockTexture.Width)
                                     player1.onTopOfBlock = false;
                             }
                         }
@@ -442,7 +442,7 @@ namespace Game
                             player2.position.X += 10;
                             if (player2.onTopOfBlock)
                             {
-                                if (player2.position.X >= blocks[player2.whichBlock].position.X + blocks[player2.whichBlock].width)
+                                if (player2.position.X + player2.width <= blocks[player2.whichBlock].position.X || player2.position.X >= blocks[player2.whichBlock].position.X + blockTexture.Width)
                                     player2.onTopOfBlock = false;
                             }
                         }

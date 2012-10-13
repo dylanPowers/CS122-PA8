@@ -31,8 +31,8 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ProductName>Mario%27s Ripoff Adventure</ProductName>
     <PublisherName>The WSU CS122 A-Team</PublisherName>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.0</ApplicationVersion>
+    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
